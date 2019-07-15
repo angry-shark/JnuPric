@@ -23,54 +23,25 @@
 </template>
 
 <script>
+import API from '../../utils/api';
+
 export default {
     data() {
-      return {
-        form: {
-            username:(localStorage.getItem("username") === undefined) ? "":localStorage.getItem("username"),
-            password:""
+        return {
+            form: {
+                username:"",
+                password:""
+            }
         }
-      }
     },
     methods: {
       onSubmit() {
          console.log('submit!');
-         //console.log(this.form.username + "p: " + this.form.password)
-        // this.$router.push({name:"default", params:{
-        //     InMarket: true,
-        //     isLogin:true
-        //   }});
+         this.$store.dispatch('setUser',this.form)
+         this.$emit("loginSuccess");
+         this.$router.push("/index");
 
-        /**本地测试用，打包前请注释 */
-        this.$emit("loginSuccess",this.form.username);
-        this.$router.push("/")
-
-        /**打包前去掉注释 */
-        //  this.axios.post('/login',{
-        //      username:this.form.username,
-        //      password:this.form.password
-        //  }).
-        //  then(function(response){
-        //      console.log("receive sucessful");
-        //      console.log(response);
-        //      let routername = response.data.router;
-        //      let username = response.data.username;
-        //      console.log(routername + "\n" + username)
-        //     this.$emit("loginSuccess",username);
-        //     this.$router.push({name:routername, params:{
-        //     InMarket: true
-        // }}); 
-
-        //     //to do unAccounct etc
-        //  }.bind(this)).
-        //  catch(function(error){
-        //      console.log("can't connnect")
-        //      console.log(error);
-        //     //  let routername = error.body.login;
-        //     //  this.$router.push({name:routername}); 
-        //  })
-
-      }
+      },
     }
 }
 </script>

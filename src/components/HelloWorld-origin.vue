@@ -117,15 +117,12 @@ export default {
   data() {
     return {
       inMarket: true,
-//      isLogin:false,
+      isLogin:false,
     }
   },
   computed:{
     getUser(){
       return this.$store.state.user;
-    },
-    isLogin(){
-      return this.getUser.isLogin;
     }
   },
   methods: {
@@ -137,13 +134,41 @@ export default {
     setUser(){
       if(this.getUser.username != ""){
         console.log("not empty")
+        this.isLogin = true;
       }
       this.inMarket = true;
-    },
+      // if(newusername != ""){
+      //   this.isLogin = true;
+      //   this.username = newusername;
+      //   this.inMarket = true;
+      //   this.user = {
+      //     password:"aaaaaaa",
+      //     username:this.username,
+      //     sex:"girl"
+      //   }
+          /**向服务端获取UserbyUsername */
+          // this.$axios.get("/getUserInfo",{
+          //     params:{
+          //     username: this.username
+          //   }
+          // }).
+          // then(function(response){
+          //   console.log(response.data)
+          //   user = response.data.userInfo
+          // }).
+          // catch(function(error){
+          //   console.log(error)
+          // });
+        },
 
     LogoutUser(){
       if(this.isLogin){
-        this.$store.dispatch('logout');
+        this.isLogin = false;
+        console.log("before clear " + this.username)
+        this.username = "";
+        this.user = {};
+        localStorage.removeItem("username");
+        console.log("after clear " + this.username)
       }else{
         this.isLogin = false;
       }

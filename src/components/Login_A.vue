@@ -1,10 +1,6 @@
 <template>
     <div>
-        <!-- <form action="/login" method="POST">
-            Username: <input type="text" name="username">
-            Password:<input type="password" name="password">
-            <input type="submit" value="login">
-        </form> -->
+
         <el-card>
             <!-- <el-form ref="form" :model="form" label-width="80px">
                 <el-form-item label="Username">
