@@ -1,4 +1,4 @@
-# shopfront
+`# shopfront
 
 ## Project setup
 ```
