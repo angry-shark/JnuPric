@@ -11,31 +11,12 @@
           </el-col>
            <el-col :span="8">
               <div style="display:inline-block;float:left;margin-left:">
-                <img src="../assets/logo.png" width="30%">
+                <img src="../assets/logo.png" width="20%">
             </div>
           </el-col>
           <el-col :span="6">
               <div style="display:inline-block;float:left;margin-left:">
-                <el-dropdown>
-                  <span class="el-dropdown-link">
-                    下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>
-                  </span>
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>
-                      <router-link :to="{name:'QueryUserData',params:{username:getUser.username}}" @click.native="getUserInfoForVuex()">
-                        个人信息
-                      </router-link>
-                    </el-dropdown-item>
-
-                    <el-dropdown-item>
-                      <router-link to="/ModifyPage">修改资料</router-link>
-                    </el-dropdown-item>
-
-                    <el-dropdown-item>
-                      <router-link to="/ModifyPassWord">修改密码</router-link>
-                    </el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
+                aaa
             </div>
           </el-col>
           <el-col :span="5">
@@ -52,17 +33,49 @@
                         </router-link>
 
                         <!-- 登出 -->
-                        <form action="/logout" method="GET" v-show="isLogin">
-                          <input type="submit" value="logout" @click="LogoutUser()">
-                        </form>
-                    </span>
+                        <el-dropdown v-show="isLogin" style="text-align:center">
+                          <span class="el-dropdown-link">
+                            我的账户<i class="el-icon-arrow-down el-icon--right"></i>
+                          </span>
+                            <el-dropdown-menu slot="dropdown">
+                              <el-dropdown-item>
+                                <router-link :to="{name:'QueryUserData',params:{username:getUser.username}}" @click.native="getUserInfoForVuex()">
+                                  个人信息
+                                </router-link>
+                              </el-dropdown-item>
+                              <br>
+                              <el-dropdown-item>
+                                <router-link to="/ModifyPage">修改资料</router-link>
+                              </el-dropdown-item>
+                              <br>
+                              <el-dropdown-item>
+                                <router-link to="/ModifyPassWord">修改密码</router-link>
+                              </el-dropdown-item>
+                              <br>
+                                <el-dropdown-item>
+                                  <router-link to="/MyCart">购物车</router-link>
+                                </el-dropdown-item>
+                              <br>
+                              <el-dropdown-item>
+                                <button style="background:rgba(51, 51, 51, 0);border:0;text-align:left;padding:0;width:100%;" 
+                                @click="LogoutUser()">
+                                  登出账户
+                                </button>
+                                  <!-- <form action="/logout" method="GET" v-show="isLogin">
+                                    <input type="submit" value="退出账户" @click="LogoutUser()">
+                                  </form> -->
+                              </el-dropdown-item>
+                            </el-dropdown-menu>
+                    </el-dropdown>
+                  </span>
                   </li>
                   <li>
                     <span>
                       <!-- 前往注册界面 -->
                       <router-link 
                         @click.native="handleChangePage(false)" 
-                        to="/RegisterPage">
+                        to="/RegisterPage"
+                        >
                           Register
                         </router-link>
                     </span>
@@ -73,12 +86,12 @@
         </el-row>
       </el-header>
 
-      <el-container style="height: 480px; border: 1px solid #eee">
+      <el-container style="height: 100vh; border: 1px solid #eee">
         <transition name="el-fade-in-linear">
           <el-aside width="200px" v-show="inMarket">
             <el-button 
             type="parmary" 
-            class="el-icon-s-fold" 
+            class="el-icon-s-fold"
             @click="handleChangePage(!inMarket)"
             style="float:right;width:100%;margin-bottom:45px;background:#D3DCE6;font-size:35px;">
             </el-button>
@@ -88,9 +101,9 @@
         </transition>
 
         <transition name="el-fade-in-linear">
-          <el-aside width="55px" v-show="!inMarket" class="closeBar">
+          <el-aside width="50px" v-show="!inMarket" class="closeBar">
             <el-button type="parmary" class="el-icon-s-unfold"
-            style="font-size:20px;" 
+            style="font-size:20px;float:left;height:100%;" 
             @click="handleChangePage(!inMarket)">
             </el-button>
           </el-aside>
@@ -149,11 +162,7 @@ export default {
       console.log(this.$store.state);
     },
     LogoutUser(){
-      if(this.isLogin){
-        this.$store.dispatch('logout');
-      }else{
-        this.isLogin = false;
-      }
+      this.$store.dispatch('logout');
     },
   },
   
@@ -162,6 +171,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .hello{
+    overflow-x: hidden;
+  }
+
   ul{
     list-style-type: none;
     margin:0;
@@ -172,8 +185,9 @@ export default {
     margin: 0;
     padding: 0;
     display: inline-block;
-    margin-right: 5px;
+    margin-right: 20px;
     height: 100%;
+    text-align: center;
   }
 
   nav>ul>li{
@@ -183,14 +197,14 @@ export default {
 
   .router-link-active {
     text-decoration: none;
+    
   }
 
   a{
     text-decoration: none;
-  }
-
-  a:hover{
-    background: rgb(209, 217, 228)
+    text-align: center;
+    margin: auto;
+    width: 100%;
   }
 
   .el-header, .el-footer {
@@ -203,8 +217,11 @@ export default {
   .el-main {
     background-color: #E9EEF3;
     color: #333;
+    height: 100%;
+    padding:5px;
     text-align: center;
     line-height: 160px;
+    margin-right: -25px;
   }
 
    .el-aside {
@@ -214,22 +231,19 @@ export default {
     line-height: 20px;
   }
 
-    .closeBar{
-      background-color: #E9EEF3;
-      color: #333;
-      line-height: 300px;
-      overflow: hidden;
-    }
-    
-    el-dropdown-menu{
-      background: #B3C0D1;
-    }
+  .closeBar{
+    background-color: #E9EEF3;
+    color: #333;
+    line-height: 300px;
+    overflow: hidden;
+    margin-right: -40px;
+  }
+  
+  .el-dropdown-menu{
+    background: #B3C0D1;
+  } 
 
-    el-dropdown-link {
-      cursor: pointer;
-      color: #409EFF;
-    }
-    .el-icon-arrow-down {
-      font-size: 12px;
-    }
+  .el-icon-arrow-down {
+    font-size: 12px;
+  }
 </style>

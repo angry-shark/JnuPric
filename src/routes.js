@@ -8,6 +8,8 @@ import QueryData from './components/AboutUser/QueryUserData.vue';
 
 import ProductInfo from './components/AboutProduct/ProductInfo.vue';
 
+import MyCart from './components/AboutOrderAndPay/MyCart.vue'
+
 
 const routes = [
     {
@@ -19,6 +21,11 @@ const routes = [
         path:'/product',
         name:'productInfo',
         component: ProductInfo,
+    },
+    {
+        path:'/MyCart',
+        name:'mycart',
+        component:MyCart
     },
     {
         path: '/LoginPage',

@@ -97,8 +97,7 @@ const store = {
       },
       modifyPwd(state,newpwd){
           axios.post(APIs.ModifyPwdApi,{
-            username:state.user.username,
-            oldpassword:state.user.username,
+            password:state.user.username,
             newpassword:newpwd
           }).
           then(function(response){
@@ -107,10 +106,18 @@ const store = {
             if(response.data.msg === "ModifySuccess"){
               console.log("modify successfully")
               state.user.password = newpwd;
-            }
-            state.ModifyPwdMsg = response.data.msg;
-            state.routerName = response.data.router;
 
+              state.user.address = response.data[1].address;
+              state.user.email = response.data[1].email;
+              state.user.uid = response.data[1].uid;
+              state.user.telephone = response.data[1].telephone;
+              state.user.name = response.data[1].name;
+              state.user.idcard = response.data[1].idcard;
+            }else{
+              console.log('ModifyFail');
+            }
+            state.ModifyPwdMsg = response.data[0].msg;
+            state.routerName = response.data[0].router;
           }).
           catch(function(error){
             console.log("modifypwd fail");
@@ -118,11 +125,33 @@ const store = {
           })   
       },
       logout(state){
-        state.user.username = ""
-        state.user.password = ""
-        //login
-        state.user.isLogin = false;
-
+        // state.user.username = ""
+        // state.user.password = ""
+        // //login
+        // state.user.isLogin = false;
+        axios.get(APIs.logoutApi).
+        then((response) => {
+            console.log("logout successfully");
+            console.log(response);
+            state.user = {...{
+              uid:"",
+              username:"",
+              password:"",
+              email:"",
+              address:"",
+              telephone:"",
+              name:"",
+              idcard:"",
+              isLogin:false,
+              cart:[],
+              order:[],
+          }}
+          state.routerName = response.data.router
+        }).
+        catch(error => {
+          console.log('logout fail');
+          console.log(error);
+        })
         // sessionStorage.removeItem("username");  //登出前移除sessionStorage  
       },
       //getAllProduct
