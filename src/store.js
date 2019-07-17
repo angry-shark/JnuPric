@@ -1,3 +1,6 @@
+import APIs from './utils/api';
+import axios from 'axios';
+
 const store = {
     state: {//获取store中的值
       user:{
@@ -5,34 +8,114 @@ const store = {
           username:"",
           password:"",
           email:"",
+          address:"",
+          telephone:"",
+          name:"",
+          idcard:"",
           isLogin:false,
           cart:[],
-          order:[]
+          order:[],
       },
-      products:[
-          {
-            productId:"",
-            productName:"",
-            productPrice:0
-          },
-          {
-            productId:"",
-            productName:"",
-            productPrice:0
-          }
-      ]
+      products:[],
+      productBrand:"*",
+      routerName:"",
+      ModifyPwdMsg:"",
+      loginMsg:""
     },
     mutations: {//状态变更 eg:store.commit('increment')
-      increment (state) {
-        state.count++
+      modifyBrand (state,newbrand) {
+        state.productBrand = newbrand;
+      },
+      CheckLoginUser(state,newUsername){
+        if(newUsername !== 'guest'){
+          state.user.username = newUsername;
+          state.user.isLogin = true;
+        }else{
+          state.user.isLogin = false;
+        }
       },
       setUser (state,newUser) {
         // sessionStorage.setItem("username", newUser);  //将user添加到sessionStorage
+        axios.post(APIs.loginApi,{
+             username:newUser.username,
+             password:newUser.password
+         }).
+         then(function(response){
+             console.log("receive sucessful");
+             console.log(response);
 
-        state.user.username = newUser.username
-        state.user.password = newUser.password
-        //login
-        state.user.isLogin = true;
+             state.loginMsg = response.data.msg;
+
+            if(response.data.router === "default"){//Successlogin successfully
+              console.log("login suceess")
+              state.routerName = response.data.router;
+              state.user.username = newUser.username
+              state.user.password = newUser.password
+              //login
+              state.user.isLogin = true;
+            }else{//to do unAccounct etc
+              console.log("login fail")
+              state.routerName = "login";
+              state.user.isLogin = false;
+            }
+
+         }).
+         catch(function(error){
+             console.log("can't connnect")
+             console.log(error);
+            //  let routername = error.body.login;
+            //  this.$router.push({name:routername}); 
+         })
+      },
+      getUserInfo(state){
+        axios.post(APIs.getUserInfoApi,{
+          username:state.user.username,
+        }).
+        then(function(response){
+            console.log("gup receive sucessful");
+            console.log(response);
+            state.routerName = response.data[0].router;
+            state.user.email = response.data[1].email;
+            state.user.telephone = response.data[1].telephone;
+            state.user.name = response.data[1].name;
+            state.user.address = response.data[1].address;
+            state.user.idcard = response.data[1].idcard;
+           // console.log(response.data.userInfo[1].email);
+            // console.log('state');
+            // console.log(state);
+        }).
+        catch(function(error){
+            console.log(" gupcan't connnect")
+            console.log(error);
+          //  let routername = error.body.login;
+          //  this.$router.push({name:routername}); 
+        })
+      },
+      modifyUserInfo(state,newInfo){
+        console.log(state);
+        console.log(newInfo);
+      },
+      modifyPwd(state,newpwd){
+          axios.post(APIs.ModifyPwdApi,{
+            username:state.user.username,
+            oldpassword:state.user.username,
+            newpassword:newpwd
+          }).
+          then(function(response){
+            console.log("receive successfully")
+            console.log(response);
+            if(response.data.msg === "ModifySuccess"){
+              console.log("modify successfully")
+              state.user.password = newpwd;
+            }
+            state.ModifyPwdMsg = response.data.msg;
+            state.routerName = response.data.router;
+
+          }).
+          catch(function(error){
+            console.log("modifypwd fail");
+            console.log(error);
+          })   
       },
       logout(state){
         state.user.username = ""
@@ -41,6 +124,20 @@ const store = {
         state.user.isLogin = false;
 
         // sessionStorage.removeItem("username");  //登出前移除sessionStorage  
+      },
+      //getAllProduct
+      getAllProductList(state){
+        axios.get(APIs.getProductList).
+        then((response) => {
+          console.log("get list successfully");
+          console.log(response);
+          state.products = response.data[1];
+          console.log(state.products);
+        }).
+        catch(error => {
+          console.log("get list fail");
+          console.log(error);
+        })
       }
     },
     actions: {
@@ -53,15 +150,31 @@ const store = {
             type: 'incrementAsync',
             amount: 10
           })*/
-        increment (context) {
-          context.commit('increment')
+        ModifyBrand (context,newbrand) {
+          context.commit('modifyBrand',newbrand);
+        },
+        CheckLoginUser(context,newUsername){
+          context.commit('CheckLoginUser',newUsername);
         },
         setUser (context,newUser) {
           context.commit('setUser',newUser);
  
         },
+        getUserInfo(context){
+          context.commit('getUserInfo');
+        },
+        modifyPwd(context,newpwd){
+          context.commit('modifyPwd',newpwd);
+        },
+        modifyUserInfo(context,newInfo){
+          context.commit('modifyUserInfo',newInfo);
+        },
         logout(context){
           context.commit('logout');
+        },
+
+        getAllProductList(context){
+          context.commit('getAllProductList');
         }
       }
   }

@@ -1,9 +1,15 @@
 const loginApi = "/login"
-const getUserInfo = "/getUserInfo"
-const register = "/register"
+const getUserInfoApi = "/getUserInfo"
+const registerApi = "/register"
+const ModifyPwdApi = "/passwdModify"
+const ModifyUserInfo = ""
+const getProductList = "/getAllProducts"
 
 export default {
     loginApi,
-    getUserInfo,
-    register
+    getUserInfoApi,
+    registerApi,
+    ModifyPwdApi,
+    ModifyUserInfo,
+    getProductList
 }

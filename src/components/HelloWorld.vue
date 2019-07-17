@@ -22,7 +22,7 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item>
-                      <router-link :to="{name:'QueryUserData',params:{username:getUser.username}}">
+                      <router-link :to="{name:'QueryUserData',params:{username:getUser.username}}" @click.native="getUserInfoForVuex()">
                         个人信息
                       </router-link>
                     </el-dropdown-item>
@@ -78,24 +78,20 @@
           <el-aside width="200px" v-show="inMarket">
             <el-button 
             type="parmary" 
-            class="el-icon-d-arrow-left" 
+            class="el-icon-s-fold" 
             @click="handleChangePage(!inMarket)"
-            style="float:right;width:100%">
+            style="float:right;width:100%;margin-bottom:45px;background:#D3DCE6;font-size:35px;">
             </el-button>
-            <nav>
-              <ul>
-                <li>a</li>
-                <li>a</li>
-                <li>a</li>
-                <li>a</li>
-              </ul>
-            </nav>       
+
+            <NavPanel></NavPanel> 
           </el-aside>
         </transition>
 
         <transition name="el-fade-in-linear">
           <el-aside width="55px" v-show="!inMarket" class="closeBar">
-            <el-button type="parmary" class="el-icon-d-arrow-right" @click="handleChangePage(!inMarket)">
+            <el-button type="parmary" class="el-icon-s-unfold"
+            style="font-size:20px;" 
+            @click="handleChangePage(!inMarket)">
             </el-button>
           </el-aside>
         </transition>  
@@ -112,6 +108,7 @@
 </template>
 
 <script>
+import NavPanel from './AboutProduct/NavBarForProduct'
 export default {
   name: 'HelloWorld',
   data() {
@@ -120,12 +117,18 @@ export default {
 //      isLogin:false,
     }
   },
+  components:{
+    NavPanel
+  },
   computed:{
     getUser(){
       return this.$store.state.user;
     },
     isLogin(){
       return this.getUser.isLogin;
+    },
+    brand(){
+      return this.$store.state.productBrand;
     }
   },
   methods: {
@@ -133,14 +136,18 @@ export default {
       console.log("change Page!");
       this.inMarket = isinMarket;
     },
-
     setUser(){
       if(this.getUser.username != ""){
         console.log("not empty")
       }
       this.inMarket = true;
     },
-
+    getUserInfoForVuex(){
+      console.log("get before")
+      this.$store.dispatch('getUserInfo');
+      console.log("get after the vuex state")
+      console.log(this.$store.state);
+    },
     LogoutUser(){
       if(this.isLogin){
         this.$store.dispatch('logout');

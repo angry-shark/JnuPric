@@ -1,10 +1,5 @@
 <template>
     <div>
-        <!-- <form action="/login" method="POST">
-            Username: <input type="text" name="username">
-            Password:<input type="password" name="password">
-            <input type="submit" value="login">
-        </form> -->
         <el-card>
             <el-form ref="form" :model="form" label-width="80px">
                 <el-form-item label="Username" label-position="right">
@@ -14,17 +9,14 @@
                     <el-input v-model="form.password" size="small" type="password"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="onSubmit">login</el-button>
+                    <el-button type="primary" @click="onSubmit">Login</el-button>
                 </el-form-item>
             </el-form>
         </el-card>
- 
     </div>
 </template>
 
 <script>
-import API from '../../utils/api';
-
 export default {
     data() {
         return {
@@ -38,10 +30,33 @@ export default {
       onSubmit() {
          console.log('submit!');
          this.$store.dispatch('setUser',this.form)
-         this.$emit("loginSuccess");
-         this.$router.push("/index");
-
+         if(!this.isLoginSuceessfully){
+             console.log("login fail in Vue")
+             //若登录未成功
+             this.form =  {
+                username:"",
+                password:""
+            }
+            console.log(this.$store.state.loginMsg);
+            // this.$alert(this.$store.state.loginMsg, 'Warning!', {
+            //     confirmButtonText: '确定',
+            //     callback: action => {}
+            // });           
+         }else{
+             console.log('login suceess in vue')
+            this.$emit("loginSuccess");
+            this.$router.push({name:this.routerName});
+         }
+     
       },
+    },
+    computed:{
+        routerName() { 
+            return this.$store.state.routerName;
+        },
+        isLoginSuceessfully(){
+            return this.$store.state.user.isLogin;
+        }
     }
 }
 </script>

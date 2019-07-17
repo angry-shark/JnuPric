@@ -1,10 +1,11 @@
 <template>
     <div>
         <h1>UserInfo</h1>
-        <h4 v-for="(val,key,i) in getUser" :key="i">
-            {{key}} is {{val}}
-        </h4>
-        <br>
+        <ul>
+            <li v-for="(val,key,i) in getUserInfo" :key="i">
+                {{key}} is {{val}}
+            </li>
+        </ul>
     </div>
 </template>
 
@@ -12,15 +13,33 @@
 <script>
 export default {
     computed:{
-        getUser(){
-            return this.$store.state.user
-        }
+        getUserInfo(){
+            return {
+                username:this.$store.state.user.username,
+                name:this.$store.state.user.name,
+                email:this.$store.state.user.email,
+                address:this.$store.state.user.address,
+                telephone:this.$store.state.user.telephone,
+                idcard:this.$store.state.user.idcard,
+            }
+        },
     }
 }
 </script>
 <style scoped>
-br{
+    ul{
+    list-style-type: none;
+    display: inline-block;
     margin:0;
     padding:0;
-}
+  }
+
+  li{
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    margin-right: 5px;
+    height: 100%;
+    width:100%;
+  }
 </style>
