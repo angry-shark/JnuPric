@@ -9,7 +9,7 @@
                 </el-carousel>
               </el-header>
               <el-main>
-                  <CartItem v-for="(item,i) in 9" :key="i"></CartItem>
+                  <CartItem v-for="(item,i) in getCartList" :key="i" :CartItem="item"></CartItem>
               </el-main>
         </el-container>
     </div>
@@ -27,6 +27,11 @@ export default {
     },
     components:{
         CartItem
+    },
+    computed:{
+        getCartList(){
+            return this.$store.state.user.cart;
+        }
     }
 }
 </script>

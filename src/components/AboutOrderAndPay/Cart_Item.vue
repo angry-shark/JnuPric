@@ -10,18 +10,18 @@
                         :fit="fit"></el-image>
             </el-col>
             <el-col :span="12">
-                <h4>HUAWEI P30</h4>
-                <p>this is the best mobile phone</p>
+                <h4>{{CartItem.brandName}} {{CartItem.productName}}</h4>
+                <p>{{CartItem.description}}</p>
             </el-col>
             <el-col :span="6" style="line-height:148px;">
                 <div style="text-align:center;">
                     <span>
-                        购买数量：
+                        购买数量:
                     </span>
                     <span>
-                        <button>-</button>
-                        <span>2</span>
-                        <button>+</button>
+                        <el-button icon="el-icon-minus"></el-button>
+                        <span>{{CartItem.count}}</span>
+                        <el-button icon="el-icon-plus"></el-button>
                     </span>
                 </div>
             </el-col>
@@ -33,6 +33,7 @@
 
 <script>
 export default {
+    props:['CartItem'],
     data() {
         return {
             url:"https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
@@ -42,6 +43,10 @@ export default {
 </script>
 
 <style scoped>
+    span{
+        font-size: 24px;
+    }
+
     .el-row{
         line-height: 30px;
     }

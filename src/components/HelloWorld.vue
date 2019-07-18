@@ -53,7 +53,7 @@
                               </el-dropdown-item>
                               <br>
                                 <el-dropdown-item>
-                                  <router-link to="/MyCart">购物车</router-link>
+                                  <router-link to="/MyCart" @click.native="getCartList()">购物车</router-link>
                                 </el-dropdown-item>
                               <br>
                               <el-dropdown-item>
@@ -142,7 +142,7 @@ export default {
     },
     brand(){
       return this.$store.state.productBrand;
-    }
+    },
   },
   methods: {
     handleChangePage(isinMarket){
@@ -164,6 +164,9 @@ export default {
     LogoutUser(){
       this.$store.dispatch('logout');
     },
+    getCartList(){
+      this.$store.dispatch('getCartList');
+    }
   },
   
 }

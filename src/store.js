@@ -97,7 +97,7 @@ const store = {
       },
       modifyPwd(state,newpwd){
           axios.post(APIs.ModifyPwdApi,{
-            password:state.user.username,
+            password:state.user.password,
             newpassword:newpwd
           }).
           then(function(response){
@@ -117,6 +117,7 @@ const store = {
               console.log('ModifyFail');
             }
             state.ModifyPwdMsg = response.data[0].msg;
+            console.log("local msg is:" + state.ModifyPwdMsg)
             state.routerName = response.data[0].router;
           }).
           catch(function(error){
@@ -167,6 +168,35 @@ const store = {
           console.log("get list fail");
           console.log(error);
         })
+      },
+      getCartList(state){
+        axios.get(APIs.getCartList).
+        then(response =>{
+          console.log("get Cartlist suceess");
+          console.log(response);
+          state.user.cart =  response.data[1];
+          console.log("local cart: ");
+          console.log(state.user.cart);
+        }).
+        catch(error => {
+          console.log("get Cartlist fail");
+          console.log(error);
+        })
+      },
+      addToCartList(state,AddCartItem){
+        axios.post(APIs.addToCart,{
+          productId:AddCartItem.id,
+          count:AddCartItem.count
+        }).
+        then(response => {
+          if(response.data.msg === 'success'){
+            console.log("add suceess");
+            console.log(response);
+          }else{
+            console.log('add fail');
+            console.log(error);
+          }
+        })
       }
     },
     actions: {
@@ -204,6 +234,13 @@ const store = {
 
         getAllProductList(context){
           context.commit('getAllProductList');
+        },
+        getCartList(context){
+          context.commit('getCartList');
+        },
+        addToCartList(context,AddCartItem){
+          console.log('In Vuex id ' + AddCartItem.id + 'count ' + AddCartItem.count);
+          context.commit('addToCartList',AddCartItem);
         }
       }
   }

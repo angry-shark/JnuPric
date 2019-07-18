@@ -47,17 +47,41 @@ export default {
             //         callback: action => {}
             //     });
             // }else 
-            if(this.form.newpassword1 != this.form.newpassword2){
-                this.form = {
-                    oldpassword:"",
-                    newpassword1:"",
-                    newpassword2:""
-                }
-                this.$alert('新密码不一致', 'Warning!', {
-                    confirmButtonText: '确定',
-                    callback: action => {}
-                });
-            }else{
+          
+    
+                if((this.form.newpassword1 != this.form.newpassword2)){
+                    this.form = {
+                        oldpassword:"",
+                        newpassword1:"",
+                        newpassword2:""
+                    };
+                    this.$alert('新密码不一致', 'Warning!', {
+                        confirmButtonText: '确定',
+                        callback: action => {}
+                    });
+                }else if(this.form.oldpassword === this.form.newpassword1 || 
+                this.form.oldpassword === this.form.newpassword2){
+                    this.form = {
+                        oldpassword:"",
+                        newpassword1:"",
+                        newpassword2:""
+                    };
+                    this.$alert('新旧密码重复', 'Warning!', {
+                        confirmButtonText: '确定',
+                        callback: action => {}
+                    });
+                }else if(this.form.newpassword1 === '' || this.form.newpassword2 === ''){
+                    this.form = {
+                        oldpassword:"",
+                        newpassword1:"",
+                        newpassword2:""
+                    };
+                    this.$alert('新密码为空', 'Warning!', {
+                        confirmButtonText: '确定',
+                        callback: action => {}
+                    });
+
+                }else{
                     this.$store.dispatch('modifyPwd',this.form.newpassword1)
                     if(this.$store.state.ModifyPwdMsg === "ModifySuccess"){
                         this.$router.push({name:this.routerName});

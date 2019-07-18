@@ -1,7 +1,7 @@
 <template>
     <div>
         <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" 
-            class="image" style="height:100%;float:left;width:100%">
+            class="image" style="height:200px;margin:auto;">
         
         <p>{{getProduct.brandName}}-{{getProduct.name}} : ${{getProduct.price}}</p>
         <p>{{getProduct.description}}</p>
