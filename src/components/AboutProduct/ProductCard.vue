@@ -8,7 +8,7 @@
           <router-link :to="{name:'productInfo',params:{id:product.id}}">
             <p>{{product.brandName}} {{product.name}} : {{product.price}}</p>
           </router-link>
-          <el-button icon="el-icon-plus" :disabled="isLogin" @click="addToCartList()">加入购物车</el-button>
+          <el-button icon="el-icon-plus" :disabled="!isLogin" @click="addToCartList()">加入购物车</el-button>
       </div>
     </el-card>
 </template>

@@ -21,6 +21,7 @@
 
 
 <script>
+import { setTimeout } from 'timers';
 export default {
     data() {
         return {
@@ -83,21 +84,23 @@ export default {
 
                 }else{
                     this.$store.dispatch('modifyPwd',this.form.newpassword1)
-                    if(this.$store.state.ModifyPwdMsg === "ModifySuccess"){
-                        this.$router.push({name:this.routerName});
-                    }else{
-                        this.form = {
-                        oldpassword:"",
-                        newpassword1:"",
-                        newpassword2:""
-                    }
-                    this.$alert('旧密码密码错误', 'Warning!', {
-                        confirmButtonText: '确定',
-                        callback: action => {}
-                    });
+                    setTimeout(()=>{
+                        if(this.$store.state.ModifyPwdMsg === "ModifySuccess"){
+                            this.$router.push({name:this.routerName});
+                        }else{
+                            this.form = {
+                            oldpassword:"",
+                            newpassword1:"",
+                            newpassword2:""
+                        }
+                        this.$alert('旧密码密码错误', 'Warning!', {
+                            confirmButtonText: '确定',
+                            callback: action => {}
+                        });
+                    }},1000)
+         
                 }
             }
-        },
     },
     computed:{
         getUser(){

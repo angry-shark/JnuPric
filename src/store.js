@@ -47,7 +47,8 @@ const store = {
              state.loginMsg = response.data.msg;
 
             if(response.data.router === "default"){//Successlogin successfully
-              console.log("login suceess")
+              console.log("login suceess"); 
+              state.user.isLogin = true;
               state.routerName = response.data.router;
               state.user.username = newUser.username
               state.user.password = newUser.password

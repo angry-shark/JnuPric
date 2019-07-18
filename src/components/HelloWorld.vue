@@ -14,12 +14,12 @@
                 <img src="../assets/logo.png" width="20%">
             </div>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="3">
               <div style="display:inline-block;float:left;margin-left:">
                 aaa
             </div>
           </el-col>
-          <el-col :span="5">
+          <el-col :span="8">
               <div style="display:inline-block;float:right">
                 <ul>
                   <li>
@@ -52,10 +52,6 @@
                                 <router-link to="/ModifyPassWord">修改密码</router-link>
                               </el-dropdown-item>
                               <br>
-                                <el-dropdown-item>
-                                  <router-link to="/MyCart" @click.native="getCartList()">购物车</router-link>
-                                </el-dropdown-item>
-                              <br>
                               <el-dropdown-item>
                                 <button style="background:rgba(51, 51, 51, 0);border:0;text-align:left;padding:0;width:100%;" 
                                 @click="LogoutUser()">
@@ -67,6 +63,10 @@
                               </el-dropdown-item>
                             </el-dropdown-menu>
                     </el-dropdown>
+
+                    <router-link v-show="isLogin" to="/MyCart" @click.native="getCartList()">我的购物车</router-link>
+
+                    <router-link v-show="isLogin" to="/MyCart" @click.native="getCartList()">我的订单</router-link>
                   </span>
                   </li>
                   <li>
@@ -75,6 +75,7 @@
                       <router-link 
                         @click.native="handleChangePage(false)" 
                         to="/RegisterPage"
+                        v-show="!isLogin"
                         >
                           Register
                         </router-link>
@@ -163,6 +164,7 @@ export default {
     },
     LogoutUser(){
       this.$store.dispatch('logout');
+      this.$router.push('/index');
     },
     getCartList(){
       this.$store.dispatch('getCartList');

@@ -9,8 +9,14 @@
                 </el-carousel>
               </el-header>
               <el-main>
-                  <CartItem v-for="(item,i) in getCartList" :key="i" :CartItem="item"></CartItem>
+                  <CartItem v-for="(item,i) in getCartList" :key="i" 
+                  :CartItem="item" @add="AddToCartTemp(item)" @remove="RemoveFromCartTemp(item)"></CartItem>
               </el-main>
+              <el-footer>
+                  <el-button style="float:right">
+                    生成订单
+                  </el-button>
+              </el-footer>
         </el-container>
     </div>
 </template>
@@ -22,15 +28,35 @@ import CartItem from './Cart_Item';
 export default {
     data() {
         return {
-            
+            cartTemp:[]
         }
     },
     components:{
         CartItem
     },
+    methods:{
+        AddToCartTemp(CartItem){
+            console.log('add');
+            this.cartTemp.push(CartItem);
+            console.log(this.cartTemp);
+        },
+        RemoveFromCartTemp(CartItem){
+            console.log('remove');
+            this.cartTemp = this.cartTemp.filter(item => {
+                return item.id !== CartItem.id;
+            });
+            console.log(this.cartTemp);
+        },
+        GenOrder(){
+            console.log("gen success");
+            this.$router.push("/index");
+        }
+    },
     computed:{
         getCartList(){
-            return this.$store.state.user.cart;
+            return {
+                ...this.$store.state.user.cart,
+            };
         }
     }
 }

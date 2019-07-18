@@ -2,6 +2,7 @@
     <div>
         <el-row :gutter="10">
             <el-col :span="6">
+                    <el-checkbox  v-model="checked"></el-checkbox>
                     <!-- <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" 
                     class="image" style="height:150px;float:left;"> -->
                       <el-image
@@ -19,9 +20,9 @@
                         购买数量:
                     </span>
                     <span>
-                        <el-button icon="el-icon-minus"></el-button>
-                        <span>{{CartItem.count}}</span>
-                        <el-button icon="el-icon-plus"></el-button>
+                        <el-button icon="el-icon-minus" @click="ReduceCount"></el-button>
+                        <span>{{count}}</span>
+                        <el-button icon="el-icon-plus" @click="AddCount"></el-button>
                     </span>
                 </div>
             </el-col>
@@ -36,9 +37,35 @@ export default {
     props:['CartItem'],
     data() {
         return {
-            url:"https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+            url:"https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
+            checked:false,
+            count:this.CartItem.count
         }
     },
+    methods:{
+        AddCount(){
+            this.count++;
+        },
+        ReduceCount(){
+            this.count--;
+        }
+    },
+    watch:{
+        checked(newVal,oldVal){
+            if(newVal){//be select will run this
+                console.log(this.CartItem.id + ' be select ' + this.checked);
+                this.$emit("add");
+            }else{//cancel select will run this
+                console.log(this.CartItem.id + ' be unselect ' + this.checked);
+                this.$emit("remove");
+            }
+        },
+        count(newVal,oldVal){
+            console.log('old value ' + oldVal);
+            console.log('new value ' + newVal);
+            console.log('final val ' + this.count);
+        }
+    }
 }
 </script>
 

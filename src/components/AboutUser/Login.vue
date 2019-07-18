@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import { setTimeout } from 'timers';
+import { checkServerIdentity } from 'tls';
 export default {
     data() {
         return {
@@ -29,24 +31,29 @@ export default {
     methods: {
       onSubmit() {
          console.log('submit!');
-         this.$store.dispatch('setUser',this.form)
-         if(!this.isLoginSuceessfully){
-             console.log("login fail in Vue")
+         this.$store.dispatch('setUser',this.form);
+         console.log('loading');
+         setTimeout(()=>{
+             if(!this.isLoginSuceessfully){
+             console.log("login fail in Vue");
              //若登录未成功
              this.form =  {
                 username:"",
                 password:""
             }
             console.log(this.$store.state.loginMsg);
-            // this.$alert(this.$store.state.loginMsg, 'Warning!', {
-            //     confirmButtonText: '确定',
-            //     callback: action => {}
-            // });           
-         }else{
-             console.log('login suceess in vue')
-            this.$emit("loginSuccess");
-            this.$router.push({name:this.routerName});
-         }
+                // this.$alert(this.$store.state.loginMsg, 'Warning!', {
+                //     confirmButtonText: '确定',
+                //     callback: action => {}
+                // });           
+            }else{
+                console.log('login suceess in vue');
+                console.log('vuex isLogin' + this.$store.state.user.isLogin)
+                this.$emit("loginSuccess");
+                this.$router.push({name:this.routerName});
+            }
+         },1000);
+         
      
       },
     },
