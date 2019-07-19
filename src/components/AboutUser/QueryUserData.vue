@@ -1,12 +1,16 @@
 <template>
-    <div>
-        <h1>UserInfo</h1>
-        <ul>
-            <li v-for="(val,key,i) in getUserInfo" :key="i">
-                {{key}} is {{val}}
-            </li>
-        </ul>
-    </div>
+    <el-card class="box-card">
+        <div slot="header" class="clearfix">
+            <h3>用户信息</h3>
+        </div>
+        <div v-for="(val,key,index) in getUserInfo" :key="index" class="text item">
+            <el-card>
+                <div>
+                    <h4>{{key}} : {{val}}</h4>
+                </div>
+            </el-card>
+        </div>
+    </el-card>
 </template>
 
 
@@ -27,19 +31,33 @@ export default {
 }
 </script>
 <style scoped>
-    ul{
-    list-style-type: none;
-    display: inline-block;
-    margin:0;
-    padding:0;
+   h4{
+       margin:0;
+   } 
+
+  .text {
+    font-size: 18px;
   }
 
-  li{
-    margin: 0;
-    padding: 0;
-    display: inline-block;
-    margin-right: 5px;
-    height: 100%;
-    width:100%;
+  .item {
+    margin-bottom: 20px;
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
+  }
+  .clearfix:after {
+    clear: both
+  }
+
+  .box-card {   
+    width: 80%;
+    margin: auto;
+  }
+
+  .el-card{
+      line-height: 30px;
   }
 </style>

@@ -9,7 +9,7 @@
                     <el-input v-model="form.password" size="small" type="password"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="onSubmit">Login</el-button>
+                    <el-button type="primary" @click="onSubmit()">Login</el-button>
                 </el-form-item>
             </el-form>
         </el-card>
@@ -42,17 +42,17 @@ export default {
                 password:""
             }
             console.log(this.$store.state.loginMsg);
-                // this.$alert(this.$store.state.loginMsg, 'Warning!', {
-                //     confirmButtonText: '确定',
-                //     callback: action => {}
-                // });           
+                this.$alert(this.$store.state.loginMsg, 'Warning!', {
+                    confirmButtonText: '确定',
+                    callback: action => {}
+                });           
             }else{
                 console.log('login suceess in vue');
                 console.log('vuex isLogin' + this.$store.state.user.isLogin)
-                this.$emit("loginSuccess");
+                //this.$emit("loginSuccess");
                 this.$router.push({name:this.routerName});
             }
-         },1000);
+         },500);
          
      
       },

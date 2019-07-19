@@ -14,7 +14,7 @@
                             prop="telephone"
                             :rules="[
                             { required: true, message: '号码不能为空'},
-                            { type: 'number', message: '号码必须为数字值'}
+                            { type: 'number', message: '号码必须为数字值'},
                             ]">
                     <el-input type="age" v-model.number="form.telephone" 
                     size="small" maxlength="11" minlength="11" autocomplete="off"></el-input>
@@ -34,9 +34,9 @@ export default {
         return {
             //userInfo:this.getUserInfo
             form:{
-                email:"aaaaaaaaaaa",
-                address:"ssssssss",
-                telephone:"",
+                email:this.getUserInfo.email,
+                address:this.getUserInfo.address,
+                telephone:this.getUserInfo.telephone,
             }
         }
     },

@@ -1,36 +1,36 @@
 <template>
     <div>
         <el-row :gutter="10">
-            <el-col :span="6">
-                    <el-checkbox  v-model="checked"></el-checkbox>
-                    <!-- <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" 
-                    class="image" style="height:150px;float:left;"> -->
-                      <el-image
-                        style="width: 140px; height: 140px"
-                        :src="url"
-                        :fit="fit"></el-image>
+            <el-col :span="1">
+                <el-checkbox  v-model="checked"></el-checkbox>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="5">
+                <el-image
+                style="width: 140px; height: 140px"
+                :src="url"
+                :fit="fit"></el-image>
+            </el-col>
+            <el-col :span="5">
                 <h4>{{CartItem.brandName}} {{CartItem.productName}}</h4>
                 <p>{{CartItem.description}}</p>
                 <p>{{CartItem.price}}</p>
             </el-col>
-            <el-col :span="6" style="line-height:148px;">
+            <el-col :span="5" style="line-height:181px;">
                 <div style="text-align:center;">
                     <span>
                         购买数量:
                     </span>
                     <span>
-                        <el-input-number v-model="count" 
-                        :min="1" :max="ProductItem.stock"
-                        label="描述文字"></el-input-number>
+                        <el-button @click="ReduceCount">-</el-button>
+                        <span>  {{ItemCount}}  </span>
+                        <el-button @click="AddCount">+</el-button>
                     </span>
                 </div>
             </el-col>
-            <el-col :span="4">
-                <p>{{SingleTotalPrice}}</p>
+            <el-col :span="4" style="line-height:151px;">
+                <p>小计 $ {{SingleTotalPrice}}</p>
             </el-col>
-            <el-col :span="2">
+            <el-col :span="4" style="line-height:181px;">
                 <el-button @click="removeItem()">移除此项</el-button>
             </el-col>
         </el-row>
@@ -46,21 +46,28 @@ export default {
         return {
             url:"https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
             checked:false,
-            count:this.CartItem.count
         }
     },
     methods:{
         AddCount(){
-            this.count++;
+            this.ChangeCount(1);
         },
         ReduceCount(){
-            this.count--;
+            this.ChangeCount(-1);
+        },
+        ChangeCount(deltaVal){
+            console.log("In Vue Change count");
+            this.$store.dispatch('ChangeCartItemCount',{
+                productId:this.CartItem.productId,
+                count:deltaVal
+            });
         },
         // print(){
         //     console.log('ProductItem');
         //     console.log(this.ProductItem);
         // },
         removeItem(){
+            
             //todo
         }
     },
@@ -70,6 +77,9 @@ export default {
         },
         SingleTotalPrice(){
             return this.CartItem.count * this.CartItem.price;
+        },
+        ItemCount(){
+            return this.CartItem.count;
         }
     },
     watch:{

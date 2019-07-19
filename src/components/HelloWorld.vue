@@ -5,21 +5,23 @@
         <el-row :gutter="20">
           <el-col :span="5">
                 <div style="display:inline-block;float:left">
-                  <router-link @click.native="handleChangePage(true)" to="/index">Home</router-link>
-                  <span v-if="isLogin" style="margin:20px;">Hello {{getUser.username}}</span>
+                  <router-link to="/index">主页</router-link>
+                  <span v-if="isLogin" style="margin:20px;margin-left:50px;">
+                    Hello {{getUser.username}}
+                  </span>
               </div>
           </el-col>
-           <el-col :span="8">
+           <el-col :span="5">
               <div style="display:inline-block;float:left;margin-left:">
                 <img src="../assets/logo.png" width="20%">
             </div>
           </el-col>
-          <el-col :span="3">
-              <div style="display:inline-block;float:left;margin-left:">
-                aaa
+          <el-col :span="5">
+              <div style="display:inline-block;float:left;margin-left:25px;">
+                欢迎来到在线手机电脑商城！
             </div>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="9">
               <div style="display:inline-block;float:right">
                 <ul>
                   <li>
@@ -29,7 +31,7 @@
                         v-show="!isLogin"
                         @click.native="handleChangePage(false)" 
                         to="/LoginPage">
-                          login
+                          登陆账号
                         </router-link>
 
                         <!-- 登出 -->
@@ -39,7 +41,8 @@
                           </span>
                             <el-dropdown-menu slot="dropdown">
                               <el-dropdown-item>
-                                <router-link :to="{name:'QueryUserData',params:{username:getUser.username}}" @click.native="getUserInfoForVuex()">
+                                <router-link :to="{name:'QueryUserData',params:{username:getUser.username}}" 
+                                @click.native="getUserInfoForVuex()">
                                   个人信息
                                 </router-link>
                               </el-dropdown-item>
@@ -49,27 +52,35 @@
                               </el-dropdown-item>
                               <br>
                               <el-dropdown-item>
-                                <router-link to="/ModifyPassWord">修改密码</router-link>
+                                <router-link to="/ModifyPassWord" 
+                                @click.native="handleChangePage(false)">
+                                  修改密码
+                                </router-link>
                               </el-dropdown-item>
                               <br>
                               <el-dropdown-item>
-                                <button style="background:rgba(51, 51, 51, 0);border:0;text-align:left;padding:0;width:100%;" 
+                                <button style="background:rgba(51, 51, 51, 0);
+                                border:0;text-align:left;padding:0;width:100%;" 
                                 @click="LogoutUser()">
                                   登出账户
                                 </button>
-                                  <!-- <form action="/logout" method="GET" v-show="isLogin">
-                                    <input type="submit" value="退出账户" @click="LogoutUser()">
-                                  </form> -->
                               </el-dropdown-item>
                             </el-dropdown-menu>
                     </el-dropdown>
-
-                    <router-link v-show="isLogin" to="/MyCart" @click.native="getCartList()">我的购物车</router-link>
-
-                    <router-link v-show="isLogin" to="/MyCart" @click.native="getCartList()">我的订单</router-link>
                   </span>
                   </li>
                   <li>
+                    <span>
+                      <router-link v-show="isLogin" to="/MyCart"
+                       @click.native="getCartList()">
+                          我的购物车
+                       </router-link>
+                      <router-link v-show="isLogin" to="/MyOrders" 
+                      @click.native="getCartList()">
+                          我的订单
+                      </router-link>
+                    </span>
+
                     <span>
                       <!-- 前往注册界面 -->
                       <router-link 
@@ -77,7 +88,7 @@
                         to="/RegisterPage"
                         v-show="!isLogin"
                         >
-                          Register
+                          注册账号
                         </router-link>
                     </span>
                   </li>
@@ -93,7 +104,7 @@
             <el-button 
             type="parmary" 
             class="el-icon-s-fold"
-            @click="handleChangePage(!inMarket)"
+            @click="handleChangePage(false)"
             style="float:right;width:100%;margin-bottom:45px;background:#D3DCE6;font-size:35px;">
             </el-button>
 
@@ -104,14 +115,16 @@
         <transition name="el-fade-in-linear">
           <el-aside width="50px" v-show="!inMarket" class="closeBar">
             <el-button type="parmary" class="el-icon-s-unfold"
-            style="font-size:20px;float:left;height:100%;" 
-            @click="handleChangePage(!inMarket)">
+            style="font-size:20px;float:left;height:100%;"
+            :disabled="this.$route.name !== 'default'" 
+            @click="handleChangePage(true)">
             </el-button>
           </el-aside>
         </transition>  
 
         <el-main>
-          <router-view @loginSuccess="setUser"></router-view>
+          <!-- <router-view @loginSuccess="setUser" @></router-view> -->
+          <router-view @leaveMarket="handleChangePage(false)"></router-view>
         </el-main>
       </el-container>
 
@@ -150,15 +163,16 @@ export default {
       console.log("change Page!");
       this.inMarket = isinMarket;
     },
-    setUser(){
-      if(this.getUser.username != ""){
-        console.log("not empty")
-      }
-      this.inMarket = true;
-    },
+    // setUser(){
+    //   if(this.getUser.username != ""){
+    //     console.log("not empty")
+    //   }
+    //   this.inMarket = true;
+    // },
     getUserInfoForVuex(){
+      this.handleChangePage(false);
       console.log("get before")
-      this.$store.dispatch('getUserInfo');
+      this.$store.dispatch('setUserInfo');
       console.log("get after the vuex state")
       console.log(this.$store.state);
     },
@@ -167,6 +181,7 @@ export default {
       this.$router.push('/index');
     },
     getCartList(){
+      this.handleChangePage(false);
       this.$store.dispatch('getCartList');
     }
   },
@@ -176,7 +191,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .hello{
+  .hello{ 
+    /* 隐藏全局的x轴滚动条 */
     overflow-x: hidden;
   }
 
@@ -210,6 +226,10 @@ export default {
     text-align: center;
     margin: auto;
     width: 100%;
+  }
+
+  span>a{
+    margin-right:30px;
   }
 
   .el-header, .el-footer {

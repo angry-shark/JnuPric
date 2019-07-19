@@ -3,22 +3,22 @@
         <nav>
             <ul>
                 <li>
-                    <button @click="transferCondition('联想')">联想</button>
+                    <el-button @click="transferCondition('联想')">联想</el-button>
                 </li>
                 <li>
-                    <button @click="transferCondition('ASUS')">ASUS</button>
+                    <el-button @click="transferCondition('ASUS')">ASUS</el-button>
                 </li>
                 <li>
-                    <button @click="transferCondition('DELL')">DELL</button>
+                    <el-button @click="transferCondition('DELL')">DELL</el-button>
                 </li>
                 <li>
-                    <button @click="transferCondition('HUAWEI')">HUAWEI</button>
+                    <el-button @click="transferCondition('HUAWEI')">HUAWEI</el-button>
                 </li>
                 <li>
-                    <button @click="transferCondition('XIAOMI')">XIAOMI</button>
+                    <el-button @click="transferCondition('XIAOMI')">XIAOMI</el-button>
                 </li>
                 <li>
-                    <button @click="transferCondition('*')">ALLBrandI</button>
+                    <el-button @click="transferCondition('*')">ALLBrandI</el-button>
                 </li>
             </ul>
         </nav>
@@ -54,5 +54,10 @@ export default {
     margin-bottom: 25px;
     height: 100%;
     width: 100%;
+  }
+
+  .el-button{
+      width:100%;
+      background: inherit;
   }
 </style>

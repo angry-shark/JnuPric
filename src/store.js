@@ -1,12 +1,14 @@
 import APIs from './utils/api';
 import axios from 'axios';
 
+
 const store = {
     state: {//获取store中的值
       user:{
           uid:"",
-          username:"",
+          username:"guest",
           password:"",
+          userType:"",
           email:"",
           address:"",
           telephone:"",
@@ -35,175 +37,103 @@ const store = {
           state.user.isLogin = false;
         }
       },
-      setUser (state,newUser) {
-        // sessionStorage.setItem("username", newUser);  //将user添加到sessionStorage
-        axios.post(APIs.loginApi,{
-             username:newUser.username,
-             password:newUser.password
-         }).
-         then(function(response){
-             console.log("receive sucessful");
-             console.log(response);
-
-             state.loginMsg = response.data.msg;
-
-            if(response.data.router === "default"){//Successlogin successfully
-              console.log("login suceess"); 
-              state.user.isLogin = true;
-              state.routerName = response.data.router;
-              state.user.username = newUser.username
-              state.user.password = newUser.password
-              //login
-              state.user.isLogin = true;
-            }else{//to do unAccounct etc
-              console.log("login fail")
-              state.routerName = "login";
-              state.user.isLogin = false;
-            }
-
-         }).
-         catch(function(error){
-             console.log("can't connnect")
-             console.log(error);
-            //  let routername = error.body.login;
-            //  this.$router.push({name:routername}); 
-         })
+      setUser (state,Innerdata) {
+        console.log('inner data is ');
+        console.log(Innerdata);
+        state.loginMsg = Innerdata.data.msg;
+        if(Innerdata.data.msg === "LoginSuccess"){
+          state.user.username = Innerdata.newUser.username;
+          state.user.password = Innerdata.newUser.password;
+          state.routerName = Innerdata.data.router;
+          state.user.isLogin = true;
+        }else{
+          state.routerName = 'login';
+          state.user.isLogin = false;
+        }
       },
-      getUserInfo(state){
-        axios.post(APIs.getUserInfoApi,{
-          username:state.user.username,
-        }).
-        then(function(response){
-            console.log("gup receive sucessful");
-            console.log(response);
-            state.routerName = response.data[0].router;
-            state.user.email = response.data[1].email;
-            state.user.telephone = response.data[1].telephone;
-            state.user.name = response.data[1].name;
-            state.user.address = response.data[1].address;
-            state.user.idcard = response.data[1].idcard;
-           // console.log(response.data.userInfo[1].email);
-            // console.log('state');
-            // console.log(state);
-        }).
-        catch(function(error){
-            console.log(" gupcan't connnect")
-            console.log(error);
-          //  let routername = error.body.login;
-          //  this.$router.push({name:routername}); 
-        })
+      setLoginMsg(state,Msg){
+        state.loginMsg = Msg;
+      },
+      setUserInfo(state,res){
+        console.log(res);
+        state.routerName = res.data[0].router;
+        state.user.email = res.data[1].email;
+        state.user.telephone = res.data[1].telephone;
+        state.user.name = res.data[1].name;
+        state.user.address = res.data[1].address;
+        state.user.idcard = res.data[1].idcard;
       },
       modifyUserInfo(state,newInfo){
         console.log(state);
         console.log(newInfo);
       },
-      modifyPwd(state,newpwd){
-          axios.post(APIs.ModifyPwdApi,{
-            password:state.user.password,
-            newpassword:newpwd
-          }).
-          then(function(response){
-            console.log("receive successfully")
-            console.log(response);
-            if(response.data.msg === "ModifySuccess"){
-              console.log("modify successfully")
-              state.user.password = newpwd;
+      modifyPwd(state,res){
+        if(res.data.msg === "ModifySuccess"){
+          console.log("modify successfully")
+          state.user.password = res.newpwd;
 
-              state.user.address = response.data[1].address;
-              state.user.email = response.data[1].email;
-              state.user.uid = response.data[1].uid;
-              state.user.telephone = response.data[1].telephone;
-              state.user.name = response.data[1].name;
-              state.user.idcard = response.data[1].idcard;
-            }else{
-              console.log('ModifyFail');
-            }
-            state.ModifyPwdMsg = response.data[0].msg;
-            console.log("local msg is:" + state.ModifyPwdMsg)
-            state.routerName = response.data[0].router;
-          }).
-          catch(function(error){
-            console.log("modifypwd fail");
-            console.log(error);
-          })   
+          state.user.address = res.data[1].address;
+          state.user.email = res.data[1].email;
+          state.user.uid = res.data[1].uid;
+          state.user.telephone = res.data[1].telephone;
+          state.user.name = res.data[1].name;
+          state.user.idcard = res.data[1].idcard;
+        }else{
+          console.log('ModifyFail');
+        }
+        state.ModifyPwdMsg = res.data[0].msg;
+        console.log("local msg is:" + state.ModifyPwdMsg)
+        state.routerName = res.data[0].router;
       },
-      logout(state){
-        // state.user.username = ""
-        // state.user.password = ""
-        // //login
-        // state.user.isLogin = false;
-        axios.get(APIs.logoutApi).
-        then((response) => {
-            console.log("logout successfully");
-            console.log(response);
-            state.user = {...{
-              uid:"",
-              username:"",
-              password:"",
-              email:"",
-              address:"",
-              telephone:"",
-              name:"",
-              idcard:"",
-              isLogin:false,
-              cart:[],
-              order:[],
-          }}
-          state.routerName = response.data.router
-        }).
-        catch(error => {
-          console.log('logout fail');
-          console.log(error);
-        })
-        // sessionStorage.removeItem("username");  //登出前移除sessionStorage  
+      logout(state,res){
+        state.user = {...{
+          uid:"",
+          username:"",
+          password:"",
+          email:"",
+          address:"",
+          telephone:"",
+          name:"",
+          idcard:"",
+          isLogin:false,
+          cart:[],
+          order:[],
+        }}
+        state.loginMsg = "";
+        state.routerName = res.data.router;
       },
       //getAllProduct
-      getAllProductList(state){
-        axios.get(APIs.getProductList).
-        then((response) => {
-          console.log("get list successfully");
-          console.log(response);
-          state.products = response.data;
-          console.log(state.products);
-        }).
-        catch(error => {
-          console.log("get list fail");
-          console.log(error);
-        })
+      getAllProductList(state,res){
+        state.products = res.data;
       },
-      getCartList(state){
-        axios.get(APIs.getCartList).
-        then(response =>{
-          console.log("get Cartlist suceess");
-          console.log(response);
-          state.user.cart =  response.data;
-          console.log("local cart: ");
-          console.log(state.user.cart);
-        }).
-        catch(error => {
-          console.log("get Cartlist fail");
-          console.log(error);
-        })
+
+      getCartList(state,res){
+        state.user.cart =  res.data;
       },
-      addToCartList(state,AddCartItem){//when buy something user this
-        axios.post(APIs.addToCart,{
-          productId:AddCartItem.id,
-          count:AddCartItem.count
-        }).
-        then(response => {
-          if(response.data.msg === 'success'){
-            console.log("add suceess");
-            console.log(response);
-          }else{
-            console.log('add fail');
-            console.log(error);
-          }
-        })
-      },
+      // addToCartList(state,AddCartItem){//when buy something user this
+        
+      // },
       //about order and cart
       SetCartTemp(state,newTemp){
         state.user.cartTemp = newTemp;
-        console.log(state.user.cartTemp);
+        state.routerName = "genorder";
+        //console.log(state.user.cartTemp);
+      },
+      RemoveCartItemFromList(state,Itemid){
+
+      },
+      ChangeCartItemCount(state,Innerdata){
+        console.log('inner data');
+        console.log(Innerdata);
+        for(let i=0;i<state.user.cart.length;i++){
+          if(state.user.cart[i].productId === Innerdata.productId){
+            state.user.cart[i].count = Innerdata.tempCount;
+          }
+        }
+      },
+
+      OrderGen(state,payload){
+        state.routerName = payload.router;
       }
     },
     actions: {
@@ -223,35 +153,171 @@ const store = {
           context.commit('CheckLoginUser',newUsername);
         },
         setUser (context,newUser) {
-          context.commit('setUser',newUser);
- 
+              axios.post(APIs.loginApi,{
+                username:newUser.username,
+                password:newUser.password
+            }).
+            then(function(response){
+                console.log("receive sucessful");
+                console.log(response);
+              if(response.data.router === "default"){
+                console.log("login suceess");      
+                context.commit('setUser',{...response,newUser});
+              }else{//to do unAccounct etc
+                console.log("login fail error username");
+                context.commit('setLoginMsg',response.data.msg);
+              }
+            }).
+            catch(function(error){
+                console.log("can't connnect")
+                console.log(error);
+            }) 
         },
-        getUserInfo(context){
-          context.commit('getUserInfo');
+
+        setUserInfo(context){
+          axios.post(APIs.getUserInfoApi,{
+            username:context.state.user.username,
+          }).
+          then(function(response){
+              console.log("gup receive sucessful");
+              console.log(response);
+              context.commit('setUserInfo',response)
+          }).
+          catch(function(error){
+              console.log("gup can't connnect")
+              console.log(error);
+          })
         },
+
         modifyPwd(context,newpwd){
-          context.commit('modifyPwd',newpwd);
+          axios.post(APIs.ModifyPwdApi,{
+            password:context.state.user.password,
+            newpassword:newpwd
+          }).
+          then(function(response){
+              console.log("receive successfully")
+              console.log(response);
+              context.commit('modifyPwd',{...response,newpwd});
+            }).
+            catch(function(error){
+              console.log("modifypwd fail");
+              console.log(error);
+            })
         },
+
         modifyUserInfo(context,newInfo){
           context.commit('modifyUserInfo',newInfo);
         },
         logout(context){
-          context.commit('logout');
+          axios.get(APIs.logoutApi).
+          then((response) => {
+              console.log("logout successfully");
+              console.log(response);
+              context.commit('logout',response);
+              
+          }).
+          catch(error => {
+            console.log('logout fail');
+            console.log(error);
+          })
         },
 
         getAllProductList(context){
-          context.commit('getAllProductList');
+          axios.get(APIs.getProductList).
+          then((response) => {
+            console.log("get list successfully");
+            console.log(response);
+            context.commit('getAllProductList',response);
+            console.log(context.state.products);
+          }).
+          catch(error => {
+            console.log("get list fail");
+            console.log(error);
+          })
+
+
         },
+
         getCartList(context){
-          context.commit('getCartList');
+          axios.get(APIs.getCartList).
+          then(response =>{
+            console.log("get Cartlist suceess");
+            console.log(response);
+            context.commit('getCartList',response);
+            console.log("local cart: ");
+            console.log(context.state.user.cart);
+          }).
+          catch(error => {
+            console.log("get Cartlist fail");
+            console.log(error);
+          })
+
+
         },
+
         addToCartList(context,AddCartItem){//when buy something user this
-          console.log('In Vuex id ' + AddCartItem.id + 'count ' + AddCartItem.count);
-          context.commit('addToCartList',AddCartItem);
+          axios.post(APIs.addToCart,{
+            productId:AddCartItem.id,
+            count:AddCartItem.count
+          }).
+          then(response => {
+            if(response.data.msg === 'success'){
+              console.log("add suceess");
+              console.log(response);
+              // context.commit('addToCartList',AddCartItem);
+              context.dispatch('getCartList');//after buy,update local cart
+            }else{
+              console.log('add fail');
+              console.log(error);
+            }
+          }).catch(error => {
+            console.log('add fail');
+            console.log(error);
+          })
         },
 
         SetCartTemp(context,newTemp){
           context.commit('SetCartTemp',newTemp);
+        },
+
+        RemoveCartItemFromList(context,Itemid){
+          axios.post(APIs.removeCartItem,{
+            
+          })
+        },
+
+        ChangeCartItemCount(context,params){
+          axios.post(APIs.ChangeCart,params).
+          then((response) => {
+            console.log('change count success');
+            if(response.data.msg === 'success'){
+              context.commit('ChangeCartItemCount',
+              {
+                productId:params.productId,
+                tempCount:response.data.count
+              });
+            }else{
+              console.log('change count fail');
+            }
+          }).
+          catch((error) => {
+            console.log('connect fail');
+            console.log(error)
+          })
+        },
+
+        OrderGen(context,payload){
+          axios.post(APIs.genOrder,payload).
+          then((response) => {
+            console(response);
+            if(response.data.msg === 'success'){
+              context.commit('OrderGen',response.data);
+            }
+          }).
+          catch((error) => {
+            console.log("connect fail");
+            console.log(error);
+          })
         }
       }
   }

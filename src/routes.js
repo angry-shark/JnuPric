@@ -10,7 +10,7 @@ import ProductInfo from './components/AboutProduct/ProductInfo.vue';
 
 import MyCart from './components/AboutOrderAndPay/MyCart.vue'
 import PayForCart from './components/AboutOrderAndPay/PayForCart.vue'
-import MyOrder from './components/AboutOrderAndPay/MyOrder.vue'
+import MyOrders from './components/AboutOrderAndPay/MyOrder.vue'
 import GenOrder from './components/AboutOrderAndPay/GenOrder.vue'
 
 
@@ -35,7 +35,7 @@ const routes = [
     {
         path:'/MyOrder',
         name:'myorder',
-        component:MyOrder
+        component:MyOrders
     },
     {
         path:'/PayForCart',
@@ -43,9 +43,9 @@ const routes = [
         component:PayForCart
     },
     {
-        path:'/MyOrder',
-        name:'myorder',
-        component:MyOrder
+        path:'/MyOrders',
+        name:'myorders',
+        component:MyOrders
     },
     {
         path:'/GenOrder',

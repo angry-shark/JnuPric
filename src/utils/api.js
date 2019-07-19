@@ -9,6 +9,10 @@ const getProductList = "/getAllProducts"
 const getCartList = '/getCartList'
 const getTotalPrice = '/getTotalPrice'
 const addToCart = '/addToCart'
+const removeCartItem = '/deleteFromCart'
+const ChangeCart = '/changeCart'
+
+const genOrder = '/orderGen'
 
 export default {
     loginApi,
@@ -20,5 +24,8 @@ export default {
     getProductList,
     getCartList,
     getTotalPrice,
-    addToCart
+    addToCart,
+    removeCartItem,
+    ChangeCart,
+    genOrder
 }

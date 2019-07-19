@@ -1,30 +1,31 @@
 <template>
     <div>
         <el-container style="line-height:200px;">
-              <el-header height="200px">
-                <el-carousel trigger="click" height="200px" width="105%">
-                    <el-carousel-item v-for="item in 4" :key="item">
-                        <h3 class="small">{{ item }}</h3>
-                    </el-carousel-item>
-                </el-carousel>
-              </el-header>
-              <el-main>
-                  <CartItem v-for="(item,i) in getCartList" :key="i" 
-                  :CartItem="item" @add="AddToCartTemp(item)" @remove="RemoveFromCartTemp(item)"></CartItem>
-              </el-main>
-              <el-footer>
-                  <router-link :to="{name:'GenOrder'}"
-                  @click.native="GenOrder()" 
-                  style="float:right">
-                    生成订单
-                  </router-link>
-              </el-footer>
+            <el-header>
+                <h2>我的购物车</h2>    
+            </el-header>            
+            <el-main>
+                <CartItem v-for="(item,i) in getCartList" :key="i" 
+                :CartItem="item" @add="AddToCartTemp(item)" @remove="RemoveFromCartTemp(item)"></CartItem>
+            </el-main>
+            <el-footer style="line-height:10px;">
+                <el-button type="primary" 
+                @click="GenOrder()"
+                :disabled="cartTemp.length === 0">
+                    生成新订单
+                </el-button>
+                <el-button type="primary" 
+                @click="goBackAndResetTempList()">
+                    返回购物车
+                </el-button>
+            </el-footer>
         </el-container>
     </div>
 </template>
 
 <script>
 import CartItem from './Cart_Item';
+import { setTimeout } from 'timers';
 
 
 export default {
@@ -49,9 +50,16 @@ export default {
             });
             console.log(this.cartTemp);
         },
+        goBackAndResetTempList(){
+            this.cartTemp = [];
+            this.$router.push('/');
+        },
         GenOrder(){
             this.$store.dispatch('SetCartTemp',this.cartTemp);
             console.log("gen success");
+            setTimeout(()=>{
+                this.$router.push(this.$store.state.routerName);
+            },500);
         }
     },
     computed:{
@@ -81,23 +89,10 @@ export default {
         line-height: 160px;
     }
 
-    .el-carousel{
-        margin-right: -15px
+    .el-button{
+        margin: 0px;
+        margin-right: 35px;
+        margin-top: 10px
     }
 
-     .el-carousel__item{
-        color: #475669;
-        font-size: 14px;
-        opacity: 0.75;
-        margin: 1px;
-        padding: -5px;       
-    }
-    
-    .el-carousel__item:nth-child(2n) {
-        background-color: #99a9bf;
-    }
-    
-    .el-carousel__item:nth-child(2n+1) {
-        background-color: #d3dce6;
-    }
 </style>

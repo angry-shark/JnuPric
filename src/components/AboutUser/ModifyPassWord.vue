@@ -12,7 +12,7 @@
                     <el-input v-model="form.newpassword2" size="small" type="password"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="onSubmit">login</el-button>
+                    <el-button type="primary" @click="onSubmit">修改密码</el-button>
                 </el-form-item>
             </el-form>
         </el-card>
@@ -36,20 +36,6 @@ export default {
     },
     methods:{
         onSubmit(){
-            // if(this.form.oldpassword != this.getUser.password){
-            //     //resetAllField
-            //     this.form = {
-            //         oldpassword:"",
-            //         newpassword1:"",
-            //         newpassword2:""
-            //         }
-            //     this.$alert('旧密码错误', 'Warning!', {
-            //         confirmButtonText: '确定',
-            //         callback: action => {}
-            //     });
-            // }else 
-          
-    
                 if((this.form.newpassword1 != this.form.newpassword2)){
                     this.form = {
                         oldpassword:"",

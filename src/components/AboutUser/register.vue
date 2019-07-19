@@ -8,9 +8,15 @@
                 <el-form-item label="密码" label-position="right">
                     <el-input v-model="form.password" type="password"></el-input>
                 </el-form-item>
+                <el-form-item label="姓名" label-position="right">
+                    <el-input v-model="form.name" type="text"></el-input>
+                </el-form-item>
+                <el-form-item label="身份证" label-position="right">
+                    <el-input v-model="form.idcard" type="text"></el-input>
+                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" round @click="Register()">注册</el-button>
-                    <el-button type="danger" round>取消</el-button>
+                    <el-button type="danger" round @click="goBack()">取消</el-button>
                 </el-form-item>
             </el-form>
         </el-card>
@@ -24,7 +30,9 @@ export default {
         return {
             form: {
                 username:"",
-                password:""
+                password:"",
+                name:"",
+                idcard:""
             }
         }
     },
@@ -32,12 +40,6 @@ export default {
         /**注册 */
         Register() {
          console.log('start register!');
-
-        /**若注册成功则回到登录页 */
-        // localStorage.setItem("username",this.form.username); //保存到localStorage中
-        // this.$router.push("/LoginPage");
-
-
          this.axios.post(API.registerApi,{
              username:this.form.username,
              password:this.form.password
@@ -53,11 +55,11 @@ export default {
          }.bind(this)).
          catch(function(error){
              console.log("can't connnect")
-             console.log(error);
-            //  let routername = error.body.login;
-            //  this.$router.push({name:routername}); 
+             console.log(error); 
          })
-
+      },
+      goBack(){
+          this.$router.push('/');
       }
     }
 }
@@ -67,7 +69,7 @@ export default {
     .el-card{
         width:500px;
         margin: auto;
-        margin-top: 10px;
+        margin-top: 80px;
     }    
 
     .el-form .el-form-item .el-input{
