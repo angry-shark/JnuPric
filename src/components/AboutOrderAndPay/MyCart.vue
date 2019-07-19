@@ -13,9 +13,11 @@
                   :CartItem="item" @add="AddToCartTemp(item)" @remove="RemoveFromCartTemp(item)"></CartItem>
               </el-main>
               <el-footer>
-                  <el-button style="float:right">
+                  <router-link :to="{name:'GenOrder'}"
+                  @click.native="GenOrder()" 
+                  style="float:right">
                     生成订单
-                  </el-button>
+                  </router-link>
               </el-footer>
         </el-container>
     </div>
@@ -48,8 +50,8 @@ export default {
             console.log(this.cartTemp);
         },
         GenOrder(){
+            this.$store.dispatch('SetCartTemp',this.cartTemp);
             console.log("gen success");
-            this.$router.push("/index");
         }
     },
     computed:{

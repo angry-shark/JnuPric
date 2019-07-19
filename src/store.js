@@ -14,6 +14,7 @@ const store = {
           idcard:"",
           isLogin:false,
           cart:[],
+          cartTemp:[],
           order:[],
       },
       products:[],
@@ -162,7 +163,7 @@ const store = {
         then((response) => {
           console.log("get list successfully");
           console.log(response);
-          state.products = response.data[1];
+          state.products = response.data;
           console.log(state.products);
         }).
         catch(error => {
@@ -175,7 +176,7 @@ const store = {
         then(response =>{
           console.log("get Cartlist suceess");
           console.log(response);
-          state.user.cart =  response.data[1];
+          state.user.cart =  response.data;
           console.log("local cart: ");
           console.log(state.user.cart);
         }).
@@ -184,7 +185,7 @@ const store = {
           console.log(error);
         })
       },
-      addToCartList(state,AddCartItem){
+      addToCartList(state,AddCartItem){//when buy something user this
         axios.post(APIs.addToCart,{
           productId:AddCartItem.id,
           count:AddCartItem.count
@@ -198,6 +199,11 @@ const store = {
             console.log(error);
           }
         })
+      },
+      //about order and cart
+      SetCartTemp(state,newTemp){
+        state.user.cartTemp = newTemp;
+        console.log(state.user.cartTemp);
       }
     },
     actions: {
@@ -239,9 +245,13 @@ const store = {
         getCartList(context){
           context.commit('getCartList');
         },
-        addToCartList(context,AddCartItem){
+        addToCartList(context,AddCartItem){//when buy something user this
           console.log('In Vuex id ' + AddCartItem.id + 'count ' + AddCartItem.count);
           context.commit('addToCartList',AddCartItem);
+        },
+
+        SetCartTemp(context,newTemp){
+          context.commit('SetCartTemp',newTemp);
         }
       }
   }

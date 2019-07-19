@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import API from '../../utils/api';
 export default {
     data() {
         return {
@@ -33,33 +34,29 @@ export default {
          console.log('start register!');
 
         /**若注册成功则回到登录页 */
-        localStorage.setItem("username",this.form.username); //保存到localStorage中
-        this.$router.push("/LoginPage");
+        // localStorage.setItem("username",this.form.username); //保存到localStorage中
+        // this.$router.push("/LoginPage");
 
 
-        //  this.axios.post('/login',{
-        //      username:this.form.username,
-        //      password:this.form.password
-        //  }).
-        //  then(function(response){
-        //      console.log("receive sucessful");
-        //      console.log(response);
-        //      let routername = response.data.router;
-        //      let username = response.data.username;
-        //      console.log(routername + "\n" + username)
-        //       if（routername === "login"){//如果回传的路由名为login则表示注册成功
-        //          localStorage.setItem("username",this.form.username); //保存到localStorage中
-        //      }
-        //      this.$router.push({name:routername}); //根据服务器回传的view名进行路由跳转
-        //
-        //     //to do unAccount etc
-        //  }.bind(this)).
-        //  catch(function(error){
-        //      console.log("can't connnect")
-        //      console.log(error);
-        //     //  let routername = error.body.login;
-        //     //  this.$router.push({name:routername}); 
-        //  })
+         this.axios.post(API.registerApi,{
+             username:this.form.username,
+             password:this.form.password
+         }).
+         then(function(response){
+             console.log("receive sucessful");
+             console.log(response);
+             let routername = response.data.router;
+             let msg = response.data.msg;
+             console.log(routername + "\n" + msg);
+             console.log('register sucessfully')
+             this.$router.push({name:routername}); //根据服务器回传的view名进行路由跳转
+         }.bind(this)).
+         catch(function(error){
+             console.log("can't connnect")
+             console.log(error);
+            //  let routername = error.body.login;
+            //  this.$router.push({name:routername}); 
+         })
 
       }
     }

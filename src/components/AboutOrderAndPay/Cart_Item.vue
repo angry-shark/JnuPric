@@ -10,9 +10,10 @@
                         :src="url"
                         :fit="fit"></el-image>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="6">
                 <h4>{{CartItem.brandName}} {{CartItem.productName}}</h4>
                 <p>{{CartItem.description}}</p>
+                <p>{{CartItem.price}}</p>
             </el-col>
             <el-col :span="6" style="line-height:148px;">
                 <div style="text-align:center;">
@@ -20,11 +21,17 @@
                         购买数量:
                     </span>
                     <span>
-                        <el-button icon="el-icon-minus" @click="ReduceCount"></el-button>
-                        <span>{{count}}</span>
-                        <el-button icon="el-icon-plus" @click="AddCount"></el-button>
+                        <el-input-number v-model="count" 
+                        :min="1" :max="ProductItem.stock"
+                        label="描述文字"></el-input-number>
                     </span>
                 </div>
+            </el-col>
+            <el-col :span="4">
+                <p>{{SingleTotalPrice}}</p>
+            </el-col>
+            <el-col :span="2">
+                <el-button @click="removeItem()">移除此项</el-button>
             </el-col>
         </el-row>
         <el-divider></el-divider>
@@ -48,6 +55,21 @@ export default {
         },
         ReduceCount(){
             this.count--;
+        },
+        // print(){
+        //     console.log('ProductItem');
+        //     console.log(this.ProductItem);
+        // },
+        removeItem(){
+            //todo
+        }
+    },
+    computed:{
+        ProductItem(){
+            return this.$store.state.products.filter(item => item.id === this.CartItem.id)
+        },
+        SingleTotalPrice(){
+            return this.CartItem.count * this.CartItem.price;
         }
     },
     watch:{

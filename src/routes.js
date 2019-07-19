@@ -9,9 +9,13 @@ import QueryData from './components/AboutUser/QueryUserData.vue';
 import ProductInfo from './components/AboutProduct/ProductInfo.vue';
 
 import MyCart from './components/AboutOrderAndPay/MyCart.vue'
+import PayForCart from './components/AboutOrderAndPay/PayForCart.vue'
+import MyOrder from './components/AboutOrderAndPay/MyOrder.vue'
+import GenOrder from './components/AboutOrderAndPay/GenOrder.vue'
 
 
 const routes = [
+    //product page
     {
         path:'/',
         name:'default',
@@ -27,6 +31,28 @@ const routes = [
         name:'mycart',
         component:MyCart
     },
+    //order and cart page
+    {
+        path:'/MyOrder',
+        name:'myorder',
+        component:MyOrder
+    },
+    {
+        path:'/PayForCart',
+        name:'payforcart',
+        component:PayForCart
+    },
+    {
+        path:'/MyOrder',
+        name:'myorder',
+        component:MyOrder
+    },
+    {
+        path:'/GenOrder',
+        name:'genorder',
+        component:GenOrder
+    },
+    //user page
     {
         path: '/LoginPage',
         name: 'login',
