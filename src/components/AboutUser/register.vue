@@ -8,12 +8,6 @@
                 <el-form-item label="密码" label-position="right">
                     <el-input v-model="form.password" type="password"></el-input>
                 </el-form-item>
-                <el-form-item label="姓名" label-position="right">
-                    <el-input v-model="form.name" type="text"></el-input>
-                </el-form-item>
-                <el-form-item label="身份证" label-position="right">
-                    <el-input v-model="form.idcard" type="text"></el-input>
-                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" round @click="Register()">注册</el-button>
                     <el-button type="danger" round @click="goBack()">取消</el-button>
@@ -31,8 +25,6 @@ export default {
             form: {
                 username:"",
                 password:"",
-                name:"",
-                idcard:""
             }
         }
     },

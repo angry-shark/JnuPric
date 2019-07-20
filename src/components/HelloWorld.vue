@@ -5,7 +5,7 @@
         <el-row :gutter="20">
           <el-col :span="5">
                 <div style="display:inline-block;float:left">
-                  <router-link to="/index">主页</router-link>
+                  <router-link to="/index" v-show="!isAdmin">主页</router-link>
                   <span v-if="isLogin" style="margin:20px;margin-left:50px;">
                     Hello {{getUser.username}}
                   </span>
@@ -35,7 +35,7 @@
                         </router-link>
 
                         <!-- 登出 -->
-                        <el-dropdown v-show="isLogin" style="text-align:center">
+                        <el-dropdown v-show="isLogin && !isAdmin" style="text-align:center">
                           <span class="el-dropdown-link">
                             我的账户<i class="el-icon-arrow-down el-icon--right"></i>
                           </span>
@@ -48,7 +48,8 @@
                               </el-dropdown-item>
                               <br>
                               <el-dropdown-item>
-                                <router-link to="/ModifyPage">修改资料</router-link>
+                                <router-link to="/ModifyPage" 
+                                @click.native="updateUserInfo()">修改资料</router-link>
                               </el-dropdown-item>
                               <br>
                               <el-dropdown-item>
@@ -71,12 +72,12 @@
                   </li>
                   <li>
                     <span>
-                      <router-link v-show="isLogin" to="/MyCart"
+                      <router-link v-show="isLogin && !isAdmin" to="/MyCart"
                        @click.native="getCartList()">
                           我的购物车
                        </router-link>
-                      <router-link v-show="isLogin" to="/MyOrders" 
-                      @click.native="getCartList()">
+                      <router-link v-show="isLogin && !isAdmin" to="/MyOrders" 
+                      @click.native="getOrderList()">
                           我的订单
                       </router-link>
                     </span>
@@ -100,7 +101,7 @@
 
       <el-container style="height: 100vh; border: 1px solid #eee">
         <transition name="el-fade-in-linear">
-          <el-aside width="200px" v-show="inMarket">
+          <el-aside width="200px" v-show="inMarket && !isAdmin">
             <el-button 
             type="parmary" 
             class="el-icon-s-fold"
@@ -123,7 +124,6 @@
         </transition>  
 
         <el-main>
-          <!-- <router-view @loginSuccess="setUser" @></router-view> -->
           <router-view @leaveMarket="handleChangePage(false)"></router-view>
         </el-main>
       </el-container>
@@ -141,7 +141,6 @@ export default {
   data() {
     return {
       inMarket: true,
-//      isLogin:false,
     }
   },
   components:{
@@ -157,24 +156,29 @@ export default {
     brand(){
       return this.$store.state.productBrand;
     },
+    isAdmin(){
+      return this.$route.name === 'adminPage'
+    }
   },
   methods: {
     handleChangePage(isinMarket){
       console.log("change Page!");
       this.inMarket = isinMarket;
     },
-    // setUser(){
-    //   if(this.getUser.username != ""){
-    //     console.log("not empty")
-    //   }
-    //   this.inMarket = true;
-    // },
+
     getUserInfoForVuex(){
       this.handleChangePage(false);
       console.log("get before")
       this.$store.dispatch('setUserInfo');
       console.log("get after the vuex state")
       console.log(this.$store.state);
+    },
+    updateUserInfo(){
+        this.handleChangePage(false);
+        console.log("updated before")
+        this.$store.dispatch('updateUserInfo');
+        console.log("updated after the vuex state")
+        console.log(this.$store.state);
     },
     LogoutUser(){
       this.$store.dispatch('logout');
@@ -183,6 +187,10 @@ export default {
     getCartList(){
       this.handleChangePage(false);
       this.$store.dispatch('getCartList');
+    },
+    getOrderList(){
+      this.handleChangePage(false);
+      this.$store.dispatch('getOrdersList');
     }
   },
   

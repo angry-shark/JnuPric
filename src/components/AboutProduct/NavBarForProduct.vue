@@ -18,7 +18,7 @@
                     <el-button @click="transferCondition('XIAOMI')">XIAOMI</el-button>
                 </li>
                 <li>
-                    <el-button @click="transferCondition('*')">ALLBrandI</el-button>
+                    <el-button @click="transferCondition('*')">ALLBrand</el-button>
                 </li>
             </ul>
         </nav>
@@ -36,7 +36,7 @@ export default {
         transferCondition(brand){
             this.$store.dispatch('ModifyBrand',brand);
         }
-    }
+    },
 }
 </script>
 

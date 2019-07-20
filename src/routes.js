@@ -9,12 +9,20 @@ import QueryData from './components/AboutUser/QueryUserData.vue';
 import ProductInfo from './components/AboutProduct/ProductInfo.vue';
 
 import MyCart from './components/AboutOrderAndPay/MyCart.vue'
-import PayForCart from './components/AboutOrderAndPay/PayForCart.vue'
-import MyOrders from './components/AboutOrderAndPay/MyOrder.vue'
+import OrderInfo from './components/AboutOrderAndPay/OrderInfo.vue'
+import MyOrders from './components/AboutOrderAndPay/MyOrders.vue'
 import GenOrder from './components/AboutOrderAndPay/GenOrder.vue'
+
+import AdminPage from './components/AboutAdmin/AdminPage.vue'
 
 
 const routes = [
+    //adminPage
+    {
+        path:'/admin',
+        name:'adminPage',
+        component:AdminPage  
+    },
     //product page
     {
         path:'/',
@@ -33,18 +41,13 @@ const routes = [
     },
     //order and cart page
     {
-        path:'/MyOrder',
-        name:'myorder',
-        component:MyOrders
-    },
-    {
-        path:'/PayForCart',
-        name:'payforcart',
-        component:PayForCart
+        path:'/OrderInfo',
+        name:'orderinfo',
+        component:OrderInfo
     },
     {
         path:'/MyOrders',
-        name:'myorders',
+        name:'myOrders',
         component:MyOrders
     },
     {

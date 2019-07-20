@@ -1,15 +1,19 @@
 <template>
-    <div>
+    <div  style="line-height:70px;">
+        <el-header height="200px" style="line-height: 100px;">
+            <el-carousel trigger="click" height="200px" width="105%">
+                <el-carousel-item v-for="item in 4" :key="item">
+                    <h3 class="small">{{ item }}</h3>
+                </el-carousel-item>
+            </el-carousel>
+        </el-header>
         <el-row>
-            <el-header height="200px">
-                <el-carousel trigger="click" height="200px" width="105%">
-                    <el-carousel-item v-for="item in 4" :key="item">
-                        <h3 class="small">{{ item }}</h3>
-                    </el-carousel-item>
-                </el-carousel>
-            </el-header>
+            <el-col :span="24">
+                <el-input v-model="input" placeholder="请输入型号搜索" style="width:80%;margin:auto;">
+                </el-input>
+            </el-col>
         </el-row>
-        <el-divider></el-divider>
+        <el-divider style="margin:5px 0;"></el-divider>
         <el-row :gutter="10">
             <el-col :span="4" v-for="(product,i) in ProductList" :key="i">
                 <ProductCard :product="product" @leaveDefaultPage="handleleaveMarket()"></ProductCard>
@@ -24,7 +28,7 @@ import ProductCard from './AboutProduct/ProductCard';
 export default {
     data() {
         return {
-            
+            input:""
         }
     },
     created(){
@@ -36,10 +40,15 @@ export default {
     },
     computed:{
         ProductList(){
-            if(this.$store.state.productBrand !== "*")
-                return this.$store.state.products.filter(item => item.brandName === this.$store.state.productBrand);
-            else
-                return this.$store.state.products
+            let result = this.$store.state.products;
+            if(this.$store.state.productBrand !== "*"){
+                result = this.$store.state.products.filter(item => item.brandName === this.$store.state.productBrand);
+            }
+            if(this.input !== ""){
+                result = result.filter(item => (item.name.toLowerCase().includes(this.input.toLowerCase())
+                ||item.brandName.toLowerCase().includes(this.input.toLowerCase())));
+            }
+            return result;
         },
     },
     methods:{

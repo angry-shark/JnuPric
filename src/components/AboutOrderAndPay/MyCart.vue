@@ -6,17 +6,18 @@
             </el-header>            
             <el-main>
                 <CartItem v-for="(item,i) in getCartList" :key="i" 
-                :CartItem="item" @add="AddToCartTemp(item)" @remove="RemoveFromCartTemp(item)"></CartItem>
+                :CartItem="item" @add="AddToCartTemp(item)" 
+                @remove="RemoveFromCartTemp(item)"></CartItem>
             </el-main>
             <el-footer style="line-height:10px;">
                 <el-button type="primary" 
                 @click="GenOrder()"
                 :disabled="cartTemp.length === 0">
-                    生成新订单
+                    提交订单
                 </el-button>
                 <el-button type="primary" 
                 @click="goBackAndResetTempList()">
-                    返回购物车
+                    返回商城
                 </el-button>
             </el-footer>
         </el-container>
@@ -38,6 +39,7 @@ export default {
         CartItem
     },
     methods:{
+        /**对于select cart list 进行操作 */
         AddToCartTemp(CartItem){
             console.log('add');
             this.cartTemp.push(CartItem);
@@ -46,7 +48,7 @@ export default {
         RemoveFromCartTemp(CartItem){
             console.log('remove');
             this.cartTemp = this.cartTemp.filter(item => {
-                return item.id !== CartItem.id;
+                return item.productId !== CartItem.productId;
             });
             console.log(this.cartTemp);
         },

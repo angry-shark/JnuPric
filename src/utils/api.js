@@ -13,6 +13,10 @@ const removeCartItem = '/deleteFromCart'
 const ChangeCart = '/changeCart'
 
 const genOrder = '/orderGen'
+const getUserOrders = '/getUserOrders'
+const getOrderItemProducts = "/getOrderProducts"
+const payForOrder = '/setOrderPay'
+
 
 export default {
     loginApi,
@@ -27,5 +31,8 @@ export default {
     addToCart,
     removeCartItem,
     ChangeCart,
-    genOrder
+    genOrder,
+    getUserOrders,
+    getOrderItemProducts,
+    payForOrder
 }

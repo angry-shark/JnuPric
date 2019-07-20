@@ -1,5 +1,7 @@
 import APIs from './utils/api';
+import AdminAPIs from './utils/AdminAPI';
 import axios from 'axios';
+import AdminAPI from './utils/AdminAPI';
 
 
 const store = {
@@ -8,7 +10,7 @@ const store = {
           uid:"",
           username:"guest",
           password:"",
-          userType:"",
+          userType:"user",
           email:"",
           address:"",
           telephone:"",
@@ -17,8 +19,12 @@ const store = {
           isLogin:false,
           cart:[],
           cartTemp:[],
-          order:[],
+          orders:[],
+          orderTemp:[]
       },
+      AllOrders:[],
+      AllUserInfo:[],
+      AllUsers:[],
       products:[],
       productBrand:"*",
       routerName:"",
@@ -28,6 +34,9 @@ const store = {
     mutations: {//状态变更 eg:store.commit('increment')
       modifyBrand (state,newbrand) {
         state.productBrand = newbrand;
+      },
+      modifyTextCondition (state,newCondition) {
+        state.textInputCondition = newCondition;
       },
       CheckLoginUser(state,newUsername){
         if(newUsername !== 'guest'){
@@ -41,10 +50,15 @@ const store = {
         console.log('inner data is ');
         console.log(Innerdata);
         state.loginMsg = Innerdata.data.msg;
+        state.user.userType = Innerdata.data.userType;
         if(Innerdata.data.msg === "LoginSuccess"){
           state.user.username = Innerdata.newUser.username;
           state.user.password = Innerdata.newUser.password;
-          state.routerName = Innerdata.data.router;
+          if(state.user.userType === "admin"){
+            state.routerName = "adminPage";
+          }else{
+            state.routerName = Innerdata.data.router;
+          }
           state.user.isLogin = true;
         }else{
           state.routerName = 'login';
@@ -63,6 +77,19 @@ const store = {
         state.user.address = res.data[1].address;
         state.user.idcard = res.data[1].idcard;
       },
+
+      updateUserInfo(state,res){//更新用户信息
+        console.log('update UserInfo success');
+        console.log(res);
+        state.routerName = "modifyPassWord";
+        state.user.email = res.data[1].email;
+        state.user.telephone = res.data[1].telephone;
+        state.user.name = res.data[1].name;
+        state.user.address = res.data[1].address;
+        state.user.idcard = res.data[1].idcard;
+      },
+
+
       modifyUserInfo(state,newInfo){
         console.log(state);
         console.log(newInfo);
@@ -88,8 +115,9 @@ const store = {
       logout(state,res){
         state.user = {...{
           uid:"",
-          username:"",
+          username:"guest",
           password:"",
+          userType:"user",
           email:"",
           address:"",
           telephone:"",
@@ -97,8 +125,15 @@ const store = {
           idcard:"",
           isLogin:false,
           cart:[],
-          order:[],
-        }}
+          cartTemp:[],
+          orders:[],
+          orderTemp:[]
+        }},
+        state.AllOrders=[],
+        state.AllUserInfo=[],
+        state.AllUsers=[],
+        state.products=[],
+        state.productBrand="*";
         state.loginMsg = "";
         state.routerName = res.data.router;
       },
@@ -120,7 +155,9 @@ const store = {
         //console.log(state.user.cartTemp);
       },
       RemoveCartItemFromList(state,Itemid){
-
+        state.user.cart = state.user.cart.filter(item => item.productId !== Itemid);
+        console.log("update local success");
+        console.log(state.user.cart);
       },
       ChangeCartItemCount(state,Innerdata){
         console.log('inner data');
@@ -134,7 +171,41 @@ const store = {
 
       OrderGen(state,payload){
         state.routerName = payload.router;
+      },
+
+      getOrdersList(state,res){
+        state.user.orders  = res.data;
+        console.log('after update local orders success in store');
+        console.log(state);
+      },
+
+      getOrderItem(state,orderItemProducts){
+        state.user.orderTemp = [];
+        state.user.orderTemp = orderItemProducts;
+        state.routerName = 'orderinfo';
+        console.log("update local orderItemTemp success");
+      },
+
+      /**For admin */
+      getOrdersListForAdmin(state,res){
+       // AllOrders:[],
+        state.AllOrders  = res.data;
+        console.log('after update admin local orders success in store');
+        console.log(state.AllOrders);
+      },
+
+      getAllUsersByAdmin(state,res){
+        state.AllUsers  = res.data;
+        console.log('after update admin local Users success in store');
+        console.log(state.AllUsers);
+      },
+      
+      getAllUserInfoByAdmin(state,res){
+        state.AllUserInfo = res.data;
+        console.log('after update admin local UserInfo success in store');
+        console.log(state.AllUserInfo);
       }
+      
     },
     actions: {
         /*Action 类似于 mutation，不同在于：
@@ -148,6 +219,9 @@ const store = {
           })*/
         ModifyBrand (context,newbrand) {
           context.commit('modifyBrand',newbrand);
+        },
+        modifyTextCondition(context,newTextCondition){
+          context.commit('modifyTextCondition',newTextCondition);
         },
         CheckLoginUser(context,newUsername){
           context.commit('CheckLoginUser',newUsername);
@@ -163,6 +237,9 @@ const store = {
               if(response.data.router === "default"){
                 console.log("login suceess");      
                 context.commit('setUser',{...response,newUser});
+                // context.dispatch('updateUserInfo'); //登陆后更新本地用户信息
+                // console.log("after update user info in login");
+                // console.log(context.state);           
               }else{//to do unAccounct etc
                 console.log("login fail error username");
                 context.commit('setLoginMsg',response.data.msg);
@@ -182,6 +259,21 @@ const store = {
               console.log("gup receive sucessful");
               console.log(response);
               context.commit('setUserInfo',response)
+          }).
+          catch(function(error){
+              console.log("gup can't connnect")
+              console.log(error);
+          })
+        },
+
+        updateUserInfo(context){
+          axios.post(APIs.getUserInfoApi,{
+            username:context.state.user.username,
+          }).
+          then(function(response){
+              console.log("gup update receive sucessful");
+              console.log(response);
+              context.commit('updateUserInfo',response)
           }).
           catch(function(error){
               console.log("gup can't connnect")
@@ -214,7 +306,6 @@ const store = {
               console.log("logout successfully");
               console.log(response);
               context.commit('logout',response);
-              
           }).
           catch(error => {
             console.log('logout fail');
@@ -277,12 +368,23 @@ const store = {
         },
 
         SetCartTemp(context,newTemp){
+          //context.dispatch('setUserInfo');
           context.commit('SetCartTemp',newTemp);
         },
 
-        RemoveCartItemFromList(context,Itemid){
+        RemoveCartItemFromList(context,Itemid){//从购物车中移除某一项
           axios.post(APIs.removeCartItem,{
-            
+            productId:Itemid
+          }).
+          then((response) => {
+            console.log("connect success!");
+            console.log(response);
+            console.log('update local cart after remove someone item in cart');//移除后更新购物车
+            context.dispatch('getCartList');
+          }).
+          catch((error) => {
+            console.log('connect fail');
+            console.log(error);
           })
         },
 
@@ -307,12 +409,130 @@ const store = {
         },
 
         OrderGen(context,payload){
-          axios.post(APIs.genOrder,payload).
+          axios.post(APIs.genOrder,payload.order).
           then((response) => {
-            console(response);
+            console.log(response);
             if(response.data.msg === 'success'){
               context.commit('OrderGen',response.data);
+              context.dispatch('getCartList');//生成订单后，update local cart
+              context.dispatch('getOrdersList');//生成订单后，update local orders
             }
+          }).
+          catch((error) => {
+            console.log("connect fail");
+            console.log(error);
+          })
+        },
+
+        getOrdersList(context){//获取所有订单
+          axios.get(APIs.getUserOrders).
+          then((response) => {
+            console.log('update loacl orders list success');
+            console.log(response);
+            context.commit('getOrdersList',response);
+          }).
+          catch((error) => {
+            console.log("connect fail");
+            console.log(error);
+          })
+        },
+
+        getOrderItem(context,ordertempId){//获取单个订单
+          console.log("orderid will be sent");
+          console.log({
+            orderId:ordertempId
+          })
+
+          axios.post(APIs.getOrderItemProducts,{
+            orderId:ordertempId
+          }).
+          then((response) => {
+            console.log('get success');
+            console.log(response);
+            context.commit('getOrderItem',response.data);
+          }).
+          catch((error) => {
+            console.log('get fail');
+            console.log(error);
+          })
+        },
+
+        setOrderPay(context,ordertempId){//支付
+          axios.post(APIs.payForOrder,{
+            orderId:ordertempId
+          }).
+          then((response) => {
+            console.log('get success');
+            console.log(response);
+            if(response.data.msg === 'success'){
+              console.log('pay success');
+              context.dispatch('getOrdersList');//支付完刷新本地订单总览
+            }else{
+              console.log('pay fail');
+            }
+          }).
+          catch((error) => {
+            console.log('pay connect fail');
+            console.log(error);
+          })
+        },
+
+              /**For admin */
+        setOrderPostByAdmin(context,ordertempId){//admin 设置发货
+          axios.post(AdminAPI.setOrderPost,{
+            orderId:ordertempId
+          }).
+          then((response) => {
+            console.log('Admin connect success');
+            console.log(response);
+            if(response.data.msg === 'success'){
+              console.log('Admin set Post success');
+              context.dispatch('getAllOrdersForAdmin');//支付完刷新本地AllOrders总览
+            }else{
+              console.log('Admin set Post success');
+            }
+          }).
+          catch((error) => {
+            console.log('Admin connect fail');
+            console.log(error);
+          })
+        },
+
+        getAllOrdersForAdmin(context){
+          axios.get(AdminAPI.getAllOrders).
+          then((response) => {
+            console.log("connect success");
+            console.log('update loacl admin Allorders list success');
+            console.log(response);
+            context.commit('getOrdersListForAdmin',response);
+          }).
+          catch((error) => {
+            console.log("connect fail");
+            console.log(error);
+          })
+        },
+
+        getAllUsersByAdmin(context){
+          axios.get(AdminAPI.getAllUsers).
+          then((response) => {
+            console.log("connect success");
+            console.log('update loacl admin AllUsers list success');
+            console.log(response);
+            context.commit('getAllUsersByAdmin',response);
+          }).
+          catch((error) => {
+            console.log("connect fail");
+            console.log(error);
+          })
+        },
+
+        getAllUserInfoByAdmin(context){
+          axios.get(AdminAPI.getAllUserInfo).
+          then((response) => {
+            console.log("connect success");
+            console.log('update loacl admin AllUserInfo list success');
+            console.log(response);
+            context.commit('getAllUserInfoByAdmin',response);
           }).
           catch((error) => {
             console.log("connect fail");

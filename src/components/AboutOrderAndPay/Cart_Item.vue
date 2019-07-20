@@ -31,7 +31,7 @@
                 <p>小计 $ {{SingleTotalPrice}}</p>
             </el-col>
             <el-col :span="4" style="line-height:181px;">
-                <el-button @click="removeItem()">移除此项</el-button>
+                <el-button @click="removeItem(CartItem.productId)">移除此项</el-button>
             </el-col>
         </el-row>
         <el-divider></el-divider>
@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import { setTimeout } from 'timers';
 export default {
     props:['CartItem'],
     data() {
@@ -62,13 +63,8 @@ export default {
                 count:deltaVal
             });
         },
-        // print(){
-        //     console.log('ProductItem');
-        //     console.log(this.ProductItem);
-        // },
-        removeItem(){
-            
-            //todo
+        removeItem(itemId){
+            this.$store.dispatch('RemoveCartItemFromList',itemId);
         }
     },
     computed:{
@@ -85,17 +81,12 @@ export default {
     watch:{
         checked(newVal,oldVal){
             if(newVal){//be select will run this
-                console.log(this.CartItem.id + ' be select ' + this.checked);
+                console.log(this.CartItem.productId + ' be select ' + this.checked);
                 this.$emit("add");
             }else{//cancel select will run this
-                console.log(this.CartItem.id + ' be unselect ' + this.checked);
+                console.log(this.CartItem.productId + ' be unselect ' + this.checked);
                 this.$emit("remove");
             }
-        },
-        count(newVal,oldVal){
-            console.log('old value ' + oldVal);
-            console.log('new value ' + newVal);
-            console.log('final val ' + this.count);
         }
     }
 }
