@@ -1,6 +1,6 @@
 <template>
     <el-container>
-        <el-main>
+        <el-main style="line-height:50px">
             <h4 style="float:left">订单号：{{OrderInfo[0].orderId}}</h4>
             <el-table
             :data="OrderInfo"
@@ -24,19 +24,19 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <span style="float:right">$ {{TotalPrice}}</span>
+            <span>总价： $ {{TotalPrice}}</span>
         </el-main>
         <el-footer style="line-height:10px;">
-                <el-button type="primary" 
-                @click="Pay()"
-                v-show="!OrderInfo[0].payStatus">
-                    支付
-                </el-button>
-                <el-button type="primary" 
-                @click="goBack()">
-                    返回
-                </el-button>
-            </el-footer>
+            <el-button type="primary" 
+            @click="Pay()"
+            v-show="!OrderInfo[0].payStatus">
+                支付
+            </el-button>
+            <el-button type="primary" 
+            @click="goBack()">
+                返回
+            </el-button>
+        </el-footer>
     </el-container>
 
 </template>

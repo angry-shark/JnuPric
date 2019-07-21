@@ -7,7 +7,7 @@
             <el-col :span="5">
                 <el-image
                 style="width: 140px; height: 140px"
-                :src="url"
+                :src="'upload/' + CartItem.url"
                 :fit="fit"></el-image>
             </el-col>
             <el-col :span="5">
@@ -45,7 +45,6 @@ export default {
     props:['CartItem'],
     data() {
         return {
-            url:"https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
             checked:false,
         }
     },

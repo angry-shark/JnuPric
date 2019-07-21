@@ -1,12 +1,5 @@
 <template>
     <div  style="line-height:70px;">
-        <el-header height="200px" style="line-height: 100px;">
-            <el-carousel trigger="click" height="200px" width="105%">
-                <el-carousel-item v-for="item in 4" :key="item">
-                    <h3 class="small">{{ item }}</h3>
-                </el-carousel-item>
-            </el-carousel>
-        </el-header>
         <el-row>
             <el-col :span="24">
                 <el-input v-model="input" placeholder="请输入型号搜索" style="width:80%;margin:auto;">

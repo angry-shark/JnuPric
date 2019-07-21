@@ -1,8 +1,8 @@
 <template>
     <el-card :body-style="{ padding: '0px',height:'400px', padding:'0'}" shadow="hover">
-        <div style="height:60%;width:100%">
-            <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" 
-            class="image" style="height:100%;float:left;width:100%">
+        <div style="height:220px;width:220px;">
+            <img :src="'upload/' + product.url"
+            class="image" style="height:100%;float:left;">
         </div>
       <div>
           <router-link :to="{name:'productInfo',params:{id:product.id}}" 
@@ -38,6 +38,10 @@ export default {
 <style scoped>
     p{
         margin:0;
+        width:100%;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
     }
 
    .bottom {

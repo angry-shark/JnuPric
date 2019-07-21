@@ -1,10 +1,12 @@
-const getAllUserInfo = "/getUserInfoByAdmin";
+const getAllUserInfo = "/getAllUserInfosByAdmin";
 const ModifyUserByAdmin = '/ModifyUserInfoByAdmin';
 const getAllUsers = "/getAllUsers";
 const getAllOrders = '/getAllOrders';
 const setOrderPost = '/setOrderPost';
 const addProduct = '/addProducts';
 const changeProducts = '/changeProducts';
+const getAllProductsByAdmin = '/getAllProductsByAdmin'
+const resetUserPwd = '/resetPassword'
 
 export default {
     getAllUserInfo,
@@ -13,5 +15,7 @@ export default {
     getAllOrders,
     setOrderPost,
     addProduct,
-    changeProducts
+    changeProducts,
+    getAllProductsByAdmin,
+    resetUserPwd
 }

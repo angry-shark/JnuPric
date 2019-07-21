@@ -1,5 +1,4 @@
 import APIs from './utils/api';
-import AdminAPIs from './utils/AdminAPI';
 import axios from 'axios';
 import AdminAPI from './utils/AdminAPI';
 
@@ -81,7 +80,7 @@ const store = {
       updateUserInfo(state,res){//更新用户信息
         console.log('update UserInfo success');
         console.log(res);
-        state.routerName = "modifyPassWord";
+        //state.routerName = 'modifyData';
         state.user.email = res.data[1].email;
         state.user.telephone = res.data[1].telephone;
         state.user.name = res.data[1].name;
@@ -132,7 +131,6 @@ const store = {
         state.AllOrders=[],
         state.AllUserInfo=[],
         state.AllUsers=[],
-        state.products=[],
         state.productBrand="*";
         state.loginMsg = "";
         state.routerName = res.data.router;
@@ -152,7 +150,6 @@ const store = {
       SetCartTemp(state,newTemp){
         state.user.cartTemp = newTemp;
         state.routerName = "genorder";
-        //console.log(state.user.cartTemp);
       },
       RemoveCartItemFromList(state,Itemid){
         state.user.cart = state.user.cart.filter(item => item.productId !== Itemid);
@@ -204,7 +201,17 @@ const store = {
         state.AllUserInfo = res.data;
         console.log('after update admin local UserInfo success in store');
         console.log(state.AllUserInfo);
-      }
+      },
+
+      // ChangeLocalProductUrl(state,UrlidSet){
+      //   state.products = state.products.map((item) => {
+      //     if(item.id === UrlidSet.id){
+      //       item.url = UrlidSet.url;
+      //     }
+      //   });
+      //   console.log('after update admin local UserInfo success in store');
+      //   console.log(state.products);
+      // }
       
     },
     actions: {
@@ -325,8 +332,6 @@ const store = {
             console.log("get list fail");
             console.log(error);
           })
-
-
         },
 
         getCartList(context){
@@ -359,7 +364,6 @@ const store = {
               context.dispatch('getCartList');//after buy,update local cart
             }else{
               console.log('add fail');
-              console.log(error);
             }
           }).catch(error => {
             console.log('add fail');
@@ -369,7 +373,20 @@ const store = {
 
         SetCartTemp(context,newTemp){
           //context.dispatch('setUserInfo');
-          context.commit('SetCartTemp',newTemp);
+          axios.post(APIs.getUserInfoApi,{
+            username:context.state.user.username,
+          }).
+          then(function(response){
+              console.log("gup update receive sucessful");
+              console.log(response);
+              context.commit('updateUserInfo',response);
+              context.commit('SetCartTemp',newTemp);
+          }).
+          catch(function(error){
+              console.log("gup can't connnect")
+              console.log(error);
+          })
+
         },
 
         RemoveCartItemFromList(context,Itemid){//从购物车中移除某一项
@@ -533,6 +550,55 @@ const store = {
             console.log('update loacl admin AllUserInfo list success');
             console.log(response);
             context.commit('getAllUserInfoByAdmin',response);
+          }).
+          catch((error) => {
+            console.log("connect fail");
+            console.log(error);
+          })
+        },
+
+        ChangeProducts(context,Productitem){
+          axios.post(AdminAPI.changeProducts,Productitem).
+          then((response) => {
+            console.log("connect succss");
+            if(response.data.msg === "changeSuccess"){
+              console.log("change success")
+              context.dispatch('getAllProductListByAdmin');
+            }else{
+              console.log("change fail")
+            }
+          }).
+          catch((error) => {
+            console.log("connect fail");
+            console.log(error);
+          })
+        },
+
+        getAllProductListByAdmin(context){
+          axios.get(AdminAPI.getAllProductsByAdmin).
+          then((response) => {
+            console.log("get list successfully");
+            console.log(response);
+            context.commit('getAllProductList',response);
+            console.log(context.state.products);
+          }).
+          catch(error => {
+            console.log("get list fail");
+            console.log(error);
+          })
+        },
+          
+        ResetUserPwd(context,userTempName){
+          axios.post(AdminAPI.resetUserPwd,{
+            username:userTempName
+          }).
+          then((response) => {
+            console.log("connect succss");
+            if(response.data.msg === "success"){
+              console.log("reset success");
+            }else{
+              console.log("change fail");
+            }
           }).
           catch((error) => {
             console.log("connect fail");

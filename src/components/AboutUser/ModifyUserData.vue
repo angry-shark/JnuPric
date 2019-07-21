@@ -3,7 +3,7 @@
         <el-card>
             <el-form ref="form" :model="form" label-width="100px">
                 <el-form-item label="姓名" label-position="right">
-                    <el-input v-model="form.email" size="small" type="text"></el-input>
+                    <el-input v-model="form.name" size="small" type="text"></el-input>
                 </el-form-item>
                 <el-form-item label="电子邮件" label-position="right">
                     <el-input v-model="form.email" size="small" type="text"></el-input>
@@ -67,7 +67,7 @@ export default {
         UpdateUserInfo(){
             //todo
             console.log("userInfo");
-            console.log(this.getUserInfo);
+            console.log(this.form);
         }
     },
     // computed:{

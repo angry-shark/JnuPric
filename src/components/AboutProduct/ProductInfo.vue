@@ -7,13 +7,16 @@
         <el-main>
             <el-row>
                 <el-col :span="8">
-                    <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" 
+                    <img :src="'upload/' + getProduct.url" 
                     class="image" style="height:200px;margin:auto;">
                 </el-col>
-                <el-col :span="16" style="line-height:30px;">
+                <el-col :span="12" style="line-height:30px;">
                     <span>品牌型号：{{getProduct.brandName}}-{{getProduct.name}}</span>
                     <el-divider></el-divider>
                     <span>价格：${{getProduct.price}}</span>
+                </el-col>
+                <el-col :span="4">
+                     <el-button icon="el-icon-plus" :disabled="!isLogin" @click="addToCartList()">加入购物车</el-button>
                 </el-col>
             </el-row>
             <el-row>
@@ -36,17 +39,24 @@ export default {
   methods:{
       goBack(){
           this.$router.push('/');
-      }
+      },
+        addToCartList(){
+        console.log('Id：' + this.product.id)
+        this.$store.dispatch('addToCartList',{...this.product,count:1});
+    },
   },
   computed:{
       getProduct(){
-          console.log("this id is " + this.id)
+        console.log("this id is " + this.id)
         for(let i=0;i<this.$store.state.products.length;i++){
             if(this.$store.state.products[i].id === this.id){
                 console.log(this.$store.state.products[i])
                 return this.$store.state.products[i];
             }
         }  
+      },
+     isLogin(){
+        return this.$store.state.user.isLogin;
       }
   }
 }

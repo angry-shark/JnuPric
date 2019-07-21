@@ -6,16 +6,16 @@
                     <el-button @click="transferCondition('联想')">联想</el-button>
                 </li>
                 <li>
-                    <el-button @click="transferCondition('ASUS')">ASUS</el-button>
+                    <el-button @click="transferCondition('apple')">apple</el-button>
                 </li>
                 <li>
-                    <el-button @click="transferCondition('DELL')">DELL</el-button>
+                    <el-button @click="transferCondition('魅族')">魅族L</el-button>
                 </li>
                 <li>
-                    <el-button @click="transferCondition('HUAWEI')">HUAWEI</el-button>
+                    <el-button @click="transferCondition('戴尔')">戴尔</el-button>
                 </li>
                 <li>
-                    <el-button @click="transferCondition('XIAOMI')">XIAOMI</el-button>
+                    <el-button @click="transferCondition('荣耀')">荣耀</el-button>
                 </li>
                 <li>
                     <el-button @click="transferCondition('*')">ALLBrand</el-button>

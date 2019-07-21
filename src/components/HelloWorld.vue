@@ -30,7 +30,8 @@
                         <router-link 
                         v-show="!isLogin"
                         @click.native="handleChangePage(false)" 
-                        to="/LoginPage">
+                        to="/LoginPage"
+                        style="font-size: 14px;">
                           登陆账号
                         </router-link>
 
@@ -48,8 +49,13 @@
                               </el-dropdown-item>
                               <br>
                               <el-dropdown-item>
-                                <router-link to="/ModifyPage" 
-                                @click.native="updateUserInfo()">修改资料</router-link>
+                                <!-- <router-link to="/ModifyPage" 
+                                @click.native="updateUserInfo()">修改资料</router-link> -->
+                                <button style="background:rgba(51, 51, 51, 0);
+                                border:0;text-align:left;padding:0;width:100%;" 
+                                @click="updateUserInfo('modifyData')">
+                                  修改资料
+                                </button>
                               </el-dropdown-item>
                               <br>
                               <el-dropdown-item>
@@ -68,16 +74,23 @@
                               </el-dropdown-item>
                             </el-dropdown-menu>
                     </el-dropdown>
+
+                      <button style="background:rgba(51, 51, 51, 0);
+                      border:0;text-align:left;padding:0;width:100%;font-size:14px;" 
+                      @click="LogoutUser()"
+                      v-show="isLogin && isAdmin">
+                        登出账户
+                      </button>
                   </span>
                   </li>
                   <li>
                     <span>
                       <router-link v-show="isLogin && !isAdmin" to="/MyCart"
-                       @click.native="getCartList()">
+                       @click.native="getCartList()" style="font-size: 14px;">
                           我的购物车
                        </router-link>
                       <router-link v-show="isLogin && !isAdmin" to="/MyOrders" 
-                      @click.native="getOrderList()">
+                      @click.native="getOrderList()" style="font-size: 14px;">
                           我的订单
                       </router-link>
                     </span>
@@ -88,7 +101,7 @@
                         @click.native="handleChangePage(false)" 
                         to="/RegisterPage"
                         v-show="!isLogin"
-                        >
+                        style="font-size: 14px;">
                           注册账号
                         </router-link>
                     </span>
@@ -136,6 +149,7 @@
 
 <script>
 import NavPanel from './AboutProduct/NavBarForProduct'
+import { setTimeout } from 'timers';
 export default {
   name: 'HelloWorld',
   data() {
@@ -173,12 +187,15 @@ export default {
       console.log("get after the vuex state")
       console.log(this.$store.state);
     },
-    updateUserInfo(){
+    updateUserInfo(routerName){
         this.handleChangePage(false);
         console.log("updated before")
         this.$store.dispatch('updateUserInfo');
-        console.log("updated after the vuex state")
-        console.log(this.$store.state);
+        setTimeout(() => {
+          console.log("updated after the vuex state")
+          console.log(this.$store.state);
+          this.$router.push({name:routerName});
+        })
     },
     LogoutUser(){
       this.$store.dispatch('logout');

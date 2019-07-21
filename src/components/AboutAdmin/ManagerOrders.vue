@@ -34,7 +34,7 @@
         <template slot-scope="scope">
             <el-button 
             type="danger"
-            :disabled="!scope.row.payStatus"
+            :disabled="!scope.row.payStatus || scope.row.postStatus"
             @click="setPostStatus(scope.row.orderId)">
                 发货
             </el-button>
