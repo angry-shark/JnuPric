@@ -7,6 +7,7 @@ const addProduct = '/addProducts';
 const changeProducts = '/changeProducts';
 const getAllProductsByAdmin = '/getAllProductsByAdmin'
 const resetUserPwd = '/resetPassword'
+const addNewProduct = '/addProducts'
 
 export default {
     getAllUserInfo,
@@ -17,5 +18,6 @@ export default {
     addProduct,
     changeProducts,
     getAllProductsByAdmin,
-    resetUserPwd
+    resetUserPwd,
+    addNewProduct
 }

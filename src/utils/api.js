@@ -3,7 +3,7 @@ const logoutApi = '/logout'
 const getUserInfoApi = "/getUserInfo"
 const registerApi = "/register"
 const ModifyPwdApi = "/passwdModify"
-const ModifyUserInfo = ""
+const ModifyUserInfo = "/userInfoModify"
 
 const getProductList = "/getAllProducts"
 const getCartList = '/getCartList'

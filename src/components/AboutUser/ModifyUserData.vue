@@ -43,6 +43,7 @@
 
 
 <script>
+import { setTimeout } from 'timers';
 export default {
     data(){
         return {
@@ -68,20 +69,16 @@ export default {
             //todo
             console.log("userInfo");
             console.log(this.form);
+            this.$store.dispatch('modifyUserInfo',this.form);
+            this.$store.dispatch('setUserInfo');
+            setTimeout(() => {
+                this.$router.push({
+                    name:'QueryUserData',
+                    params:{username:this.$store.state.user.username}
+                    });
+            },500);
         }
     },
-    // computed:{
-    //     getUserInfo(){
-    //         return {
-    //             username:this.$store.state.user.username,
-    //             name:this.$store.state.user.name,
-    //             email:this.$store.state.user.email,
-    //             address:this.$store.state.user.address,
-    //             telephone:this.$store.state.user.telephone,
-    //             idcard:this.$store.state.user.idcard,
-    //         }
-    //     },
-    // }
 }
 </script>
 

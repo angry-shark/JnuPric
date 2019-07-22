@@ -42,7 +42,7 @@ export default {
         this.$store.dispatch('getAllOrdersForAdmin');//获取admin local All Orders
         this.$store.dispatch('getAllUsersByAdmin');//获取admin local All Users
         this.$store.dispatch('getAllUserInfoByAdmin')//获取admin local All Users
-        this.$store.dispatch('getAllProductListByAdminl')//获取属于Admin 的local All products
+        this.$store.dispatch('getAllProductListByAdmin')//获取属于Admin 的local All products
         console.log("After admin update state");
         console.log(this.$store.state);
     },
@@ -60,6 +60,7 @@ export default {
 
 <style scoped>
     .el-main{
-        width:90%
+        width:90%;
+        overflow-y: scroll;
     }
 </style>

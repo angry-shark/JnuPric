@@ -89,12 +89,13 @@ const store = {
       },
 
 
-      modifyUserInfo(state,newInfo){
-        console.log(state);
-        console.log(newInfo);
+      modifyUserInfo(state,InnerData){
+        console.log("InnerData");
+        console.log(InnerData);
+        state.routerName = InnerData;
       },
       modifyPwd(state,res){
-        if(res.data.msg === "ModifySuccess"){
+        if(res.data[0].msg === "ModifySuccess"){
           console.log("modify successfully")
           state.user.password = res.newpwd;
 
@@ -305,8 +306,21 @@ const store = {
         },
 
         modifyUserInfo(context,newInfo){
-          context.commit('modifyUserInfo',newInfo);
+          axios.post(APIs.ModifyUserInfo,newInfo).
+          then((response) => {
+            console.log("receive successfully")
+            console.log(response);
+            if(response.data.msg === 'ModifySuccess'){
+              console.log("modifyInfo suceess");
+              context.commit('modifyUserInfo','QueryUserData')
+            }
+          }).
+          catch(function(error){
+            console.log("modifyInfo fail");
+            console.log(error);
+          })
         },
+
         logout(context){
           axios.get(APIs.logoutApi).
           then((response) => {
@@ -598,6 +612,22 @@ const store = {
               console.log("reset success");
             }else{
               console.log("change fail");
+            }
+          }).
+          catch((error) => {
+            console.log("connect fail");
+            console.log(error);
+          })
+        },
+
+        addNewProduct(context,newProdutct){
+          axios.post(AdminAPI.addNewProduct,newProdutct).
+          then((response) => {
+            console.log("connect succss");
+            if(response.data.msg === "success"){
+              console.log("add success");
+            }else{
+              console.log("add fail");
             }
           }).
           catch((error) => {

@@ -187,6 +187,7 @@ export default {
       console.log("get after the vuex state")
       console.log(this.$store.state);
     },
+    
     updateUserInfo(routerName){
         this.handleChangePage(false);
         console.log("updated before")
